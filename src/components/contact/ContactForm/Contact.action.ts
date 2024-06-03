@@ -9,15 +9,15 @@ export async function contactFormAction(
 ): Promise<FormState> {
   const email = formData.get("email");
   const name = formData.get("name");
-  const text = formData.get("name");
+  const message = formData.get("message");
   const honeypot = formData.get("hp");
-  if (honeypot || !name || !text || !email)
+  if (honeypot || !name || !message || !email)
     return {
       status: "error",
       message: "Merci de remplir tous les champs",
     };
 
-  const res = await sendEmail(email, name, text);
+  const res = await sendEmail(email, name, message);
   if (res) {
     return {
       status: "ok",

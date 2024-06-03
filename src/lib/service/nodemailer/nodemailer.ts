@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 export const sendEmail = async (
   emailFrom: FormDataEntryValue,
   name: FormDataEntryValue,
-  text: FormDataEntryValue
+  message: FormDataEntryValue
 ): Promise<boolean> => {
   let transporter = nodemailer.createTransport({
     service: process.env.NODEMAILER_SERVICE,
@@ -28,7 +28,7 @@ export const sendEmail = async (
     from: process.env.NODEMAILER_EMAIL, // Adresse de l'expéditeur
     to: process.env.NODEMAILER_EMAIL, // Adresse du destinataire
     subject: "Contact sur Sudfa", // Sujet de l'email
-    text: `Nouveau message de ${name} \n Email: ${emailFrom} \n Message: ${text}`, // Corps de l'email
+    text: `Nouveau message de ${name} \n Email: ${emailFrom} \n Message: ${message}`, // Corps de l'email
   };
 
   // Envoyez l'email avec l'objet transport défini

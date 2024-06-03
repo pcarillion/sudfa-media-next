@@ -46,6 +46,7 @@ export const Form = ({ submitForm, formSchema, submitText }: FormProps) => {
                   id={name}
                   key={name}
                   name={name}
+                  data-cy={name}
                   required={required}
                   placeholder={placeholder}
                   className="w-full my-6 p-2 border border-slate-500"
@@ -56,6 +57,7 @@ export const Form = ({ submitForm, formSchema, submitText }: FormProps) => {
               <input
                 type={type}
                 id={name}
+                data-cy={name}
                 key={name}
                 name={name}
                 required={required}
@@ -73,6 +75,7 @@ export const Form = ({ submitForm, formSchema, submitText }: FormProps) => {
           className={`w-full text-center my-12 ${
             state.status === "error" ? "text-red-600" : ""
           }`}
+          data-cy="form-confirmation"
         >
           {state.message}
         </div>

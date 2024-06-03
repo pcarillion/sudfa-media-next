@@ -9,6 +9,7 @@ export function SubmitButton({ text }: { text: string }) {
     <button
       type="submit"
       className="w-full my-6 p-2 border border-slate-500 relative hover:bg-slate-300"
+      data-cy="submit"
     >
       <ClipLoader
         color={"black"}

@@ -3,7 +3,7 @@ import { Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Api } from "@/lib/api";
 
-export const playfair = Playfair_Display({ subsets: ["latin"] });
+const playfair = Playfair_Display({ subsets: ["latin"] });
 
 export async function generateMetadata(): Promise<Metadata> {
   const api = await Api();
