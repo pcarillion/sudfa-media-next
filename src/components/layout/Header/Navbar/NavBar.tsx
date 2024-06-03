@@ -72,7 +72,7 @@ export const Navbar = ({ navItems }: NavBarProps) => {
       <div
         className={
           nav
-            ? "bg-white pt-4 fixed md:hidden left-0 top-0 w-full h-full ease-in-out duration-500"
+            ? "bg-white pt-4 fixed md:hidden left-0 top-0 w-full h-full ease-in-out duration-500 z-50"
             : "bg-white ease-in-out w-full duration-500 fixed top-0 bottom-0 left-[-100%]"
         }
       >
