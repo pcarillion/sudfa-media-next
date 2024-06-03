@@ -6,6 +6,13 @@ on:
   pull_request: {}
   workflow_dispatch:
 
+env:
+  SUDFA_BACKEND_BASE_URL: "" # Not needed for tests but must not be undefined
+  NODEMAILER_EMAIL: ${{ secrets.NODEMAILER_EMAIL }}
+  NODEMAILER_PASS: ${{ secrets.NODEMAILER_PASS }}
+  NODEMAILER_SERVICE: ${{ secrets.NODEMAILER_SERVICE }}
+  BASE_URL: "http://localhost:3000"
+
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
