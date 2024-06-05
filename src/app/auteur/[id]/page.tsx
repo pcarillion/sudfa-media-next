@@ -5,7 +5,6 @@ import React from "react";
 
 interface AuteurPageProps {
   params: { id: string };
-  searchParams: { p: string };
 }
 
 export async function generateMetadata({
@@ -23,9 +22,6 @@ export async function generateMetadata({
   };
 }
 
-export default async function Auteur({
-  params,
-  searchParams,
-}: AuteurPageProps) {
-  return <AuteurContainer id={params.id} page={searchParams.p} />;
+export default async function Auteur({ params }: AuteurPageProps) {
+  return <AuteurContainer id={params.id} />;
 }

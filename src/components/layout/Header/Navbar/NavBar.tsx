@@ -20,7 +20,6 @@ export const Navbar = ({ navItems }: NavBarProps) => {
   };
 
   const pathName = usePathname();
-  console.log(pathName);
 
   return (
     <nav className="w-full my-4 py-2 border border-b-2 border-x-slate-300 border-slate-700">

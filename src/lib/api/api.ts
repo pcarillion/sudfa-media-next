@@ -1,3 +1,8 @@
+/**
+ * To be updated to export async function returning object of functions
+ * see contentful service
+ */
+
 import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { buildQueryString } from "./api.utils";
 import { retrieveDataFromRequest } from "./api.utils";
