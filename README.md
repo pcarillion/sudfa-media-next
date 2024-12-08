@@ -61,3 +61,7 @@ Pour utiliser Payload, il suffit de fournir l'url de l'API dans la variable `SUD
 ## Déploiement
 
 Le projet est automatiquement déployé sur Netlify lors du push sur la branche master.
+
+## Tests e2E
+
+Des tests e2e sur Cypress ont été ajoutés, notamment pour tester le formulaire de contact.
