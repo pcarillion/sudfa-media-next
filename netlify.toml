@@ -3,7 +3,7 @@
   command = "yarn build"
   
 [build.environment]
-  NODE_VERSION = "20.14.0"
+  NODE_VERSION = "20.18.1"
   YARN_VERSION = "1.22.22"
   
 [functions]
