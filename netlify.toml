@@ -1,6 +1,6 @@
 [build]
   publish = ".next"
-  command = "next build"
+  command = "npm run setup:prod && next build"
   
 [build.environment]
   NODE_VERSION = "20.18.1"
