@@ -21,6 +21,7 @@
     "axios": "^1.7.2",
     "contentful": "^10.11.7",
     "dotenv": "^16.4.5",
+    "graphql": "^16.11.0",
     "html-react-parser": "^5.2.6",
     "moment": "^2.30.1",
     "next": "^15.4.2",
