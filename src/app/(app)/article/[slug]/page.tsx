@@ -2,14 +2,18 @@ import { ArticleContainer } from "@/containers/article";
 import { Api } from "@/lib/api";
 import { Metadata } from "next";
 
+// Force dynamic rendering - no static generation
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface ArticlePageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
-  const slug = params.slug;
+  const { slug } = await params;
   const api = await Api();
   const article = await api.getArticleBySlug(decodeURIComponent(slug));
 
@@ -23,5 +27,6 @@ export async function generateMetadata({
 }
 
 export default async function Article({ params }: ArticlePageProps) {
-  return <ArticleContainer slug={params.slug} />;
+  const { slug } = await params;
+  return <ArticleContainer slug={slug} />;
 }

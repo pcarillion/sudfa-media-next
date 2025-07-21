@@ -1,0 +1,39 @@
+/* Custom styles for Payload admin panel */
+
+/* Reset conflicting styles from main app */
+* {
+  box-sizing: border-box;
+}
+
+/* Ensure Payload styles take precedence */
+.payload-admin {
+  font-family: system-ui, -apple-system, sans-serif !important;
+}
+
+/* Isolate Payload from Tailwind resets */
+.payload-admin * {
+  all: revert;
+}
+
+/* Override any Tailwind base styles that might interfere */
+.payload-admin h1,
+.payload-admin h2,
+.payload-admin h3,
+.payload-admin h4,
+.payload-admin h5,
+.payload-admin h6 {
+  font-size: revert;
+  font-weight: revert;
+  margin: revert;
+  line-height: revert;
+}
+
+.payload-admin button {
+  all: revert;
+}
+
+.payload-admin input,
+.payload-admin select,
+.payload-admin textarea {
+  all: revert;
+}

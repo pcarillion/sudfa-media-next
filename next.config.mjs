@@ -1,5 +1,10 @@
+import { withPayload } from '@payloadcms/next/withPayload'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Force dynamic rendering globally - disable static optimization
+  output: 'standalone',
+  
   publicRuntimeConfig: {
     // Will be available on both server and client
     SUDFA_BACKEND_BASE_URL: process.env.SUDFA_BACKEND_BASE_URL,
@@ -14,6 +19,9 @@ const nextConfig = {
       },
     ],
   },
-};
+  experimental: {
+    reactCompiler: false ?? false,
+  },
+}
 
-export default nextConfig;
+export default withPayload(nextConfig)

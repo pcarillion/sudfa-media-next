@@ -3,14 +3,18 @@ import { Api } from "@/lib/api";
 import { Metadata } from "next";
 import React from "react";
 
+// Force dynamic rendering - no static generation
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 interface AuteurPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export async function generateMetadata({
   params,
 }: AuteurPageProps): Promise<Metadata> {
-  const id = params.id;
+  const { id } = await params;
   const api = await Api();
   const author = await api.getAuthorById(id);
   return {
@@ -23,5 +27,6 @@ export async function generateMetadata({
 }
 
 export default async function Auteur({ params }: AuteurPageProps) {
-  return <AuteurContainer id={params.id} />;
+  const { id } = await params;
+  return <AuteurContainer id={id} />;
 }

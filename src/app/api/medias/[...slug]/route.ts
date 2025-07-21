@@ -6,8 +6,8 @@ type Params = {
   slug: string[];
 };
 
-export async function GET(_request: NextRequest, context: { params: Params }) {
-  const slug = context.params.slug;
+export async function GET(_request: NextRequest, context: { params: Promise<Params> }) {
+  const { slug } = await context.params;
   const slugToString = slug.join("/");
   try {
     const api = (await Api()) as APIHandler; // only for payload
