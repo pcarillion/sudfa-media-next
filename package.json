@@ -16,6 +16,7 @@
   "dependencies": {
     "@contentful/rich-text-html-renderer": "^16.5.2",
     "@payloadcms/db-postgres": "^3.48.0",
+    "@payloadcms/next": "^3.48.0",
     "@payloadcms/richtext-lexical": "^3.48.0",
     "axios": "^1.7.2",
     "contentful": "^10.11.7",
