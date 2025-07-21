@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "payload migrate && next build",
     "start": "next start",
     "tscheck": "tsc -p tsconfig.json --noEmit",
     "lint": "next lint",
@@ -12,6 +12,8 @@
     "cypress:open": "cypress open",
     "generate:types": "payload generate:types",
     "payload": "payload",
+    "payload:migrate": "payload migrate",
+    "payload:migrate:create": "payload migrate:create",
     "migrate:images": "tsx src/scripts/migrate-contentful-images.ts"
   },
   "dependencies": {
