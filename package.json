@@ -14,7 +14,8 @@
     "payload": "payload",
     "payload:migrate": "payload migrate",
     "payload:migrate:create": "payload migrate:create",
-    "migrate:images": "tsx src/scripts/migrate-contentful-images.ts"
+    "migrate:images": "tsx src/scripts/migrate-contentful-images.ts",
+    "migrate:images:prod": "tsx src/scripts/migrate-local-images-to-prod.ts"
   },
   "dependencies": {
     "@contentful/rich-text-html-renderer": "^16.5.2",
