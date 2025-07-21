@@ -40,8 +40,8 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
-    push: process.env.NODE_ENV === 'production',
-    logger: true,
+    push: false, // Désactivé ici, activé dans les routes pour Vercel
+    logger: process.env.NODE_ENV === 'development',
   }),
   sharp,
   plugins: [
