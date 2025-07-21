@@ -26,16 +26,7 @@ async function initializePayload() {
   try {
     console.log('🚀 Initialisation de Payload...')
     
-    const payload = await getPayload({
-      config: {
-        ...config,
-        // Force push pour créer les tables si elles n'existent pas
-        db: {
-          ...config.db,
-          push: true,
-        }
-      }
-    })
+    const payload = await getPayload({ config })
     
     console.log('✅ Payload initialisé avec succès')
     return payload

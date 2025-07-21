@@ -13,26 +13,17 @@ type Args = {
   children: React.ReactNode
 }
 
-// Configuration pour Vercel avec push forcé
-const vercelConfig = {
-  ...config,
-  db: {
-    ...config.db,
-    push: true,
-  }
-}
-
 const serverFunction: ServerFunctionClient = async function (args) {
   'use server'
   return handleServerFunctions({
     ...args,
-    config: vercelConfig,
+    config,
     importMap,
   })
 }
 
 const Layout = ({ children }: Args) => (
-  <RootLayout config={vercelConfig} importMap={importMap} serverFunction={serverFunction}>
+  <RootLayout config={config} importMap={importMap} serverFunction={serverFunction}>
     {children}
   </RootLayout>
 )
