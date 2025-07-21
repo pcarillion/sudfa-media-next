@@ -4,7 +4,7 @@ import { Container } from "@/components/common/Container";
 import { Articles } from "@/types/api.types";
 import React, { useState } from "react";
 import { ArticlesList } from "../ArticlesList";
-import { ClipLoader } from "react-spinners";
+import { Loader2 } from "lucide-react";
 
 export const PaginatedArticlesList = ({
   initialArticles,
@@ -43,10 +43,9 @@ export const PaginatedArticlesList = ({
             onClick={() => loadMoreArticles()}
           >
             {loading ? (
-              <ClipLoader
-                color={"black"}
-                loading={true}
-                size={15}
+              <Loader2 
+                size={15} 
+                className="animate-spin"
                 aria-label="Loading Spinner"
                 data-testid="loader"
               />
