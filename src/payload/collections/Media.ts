@@ -33,5 +33,24 @@ export const Media: CollectionConfig = {
       type: 'text',
       label: 'Légende',
     },
+    {
+      name: 'contentfulId',
+      type: 'text',
+      label: 'ID Contentful',
+      admin: {
+        description: 'ID de l\'asset Contentful d\'origine (pour traçabilité)',
+        readOnly: true,
+      },
+      index: true,
+    },
+    {
+      name: 'originalUrl',
+      type: 'text',
+      label: 'URL d\'origine',
+      admin: {
+        description: 'URL originale de l\'image dans Contentful',
+        readOnly: true,
+      },
+    },
   ],
 }

@@ -4,7 +4,7 @@ export const Authors: CollectionConfig = {
   slug: 'authors',
   admin: {
     useAsTitle: 'name',
-    defaultColumns: ['name', 'slug', 'updatedAt'],
+    defaultColumns: ['name', 'type', 'slug', 'updatedAt'],
   },
   fields: [
     {
@@ -12,6 +12,30 @@ export const Authors: CollectionConfig = {
       type: 'text',
       required: true,
       label: 'Nom de l\'auteur',
+    },
+    {
+      name: 'type',
+      type: 'select',
+      required: true,
+      label: 'Type d\'auteur',
+      options: [
+        {
+          label: 'Équipe',
+          value: 'equipe',
+        },
+        {
+          label: 'Contributeur',
+          value: 'contributeur',
+        },
+        {
+          label: 'Auteur',
+          value: 'auteur',
+        },
+      ],
+      defaultValue: 'auteur',
+      admin: {
+        description: 'Sélectionnez le type d\'auteur',
+      },
     },
     {
       name: 'slug',

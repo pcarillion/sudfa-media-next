@@ -78,6 +78,7 @@ export interface Category {
 export interface Author {
   id: string;
   name: string;
+  type: 'equipe' | 'contributeur' | 'auteur';
   slug: string;
   description: string;
   photo: string | Media;
@@ -163,6 +164,7 @@ export interface CategoriesSelect<T extends boolean = true> {
 export interface AuthorsSelect<T extends boolean = true> {
   id?: T;
   name?: T;
+  type?: T;
   slug?: T;
   description?: T;
   photo?: T;
