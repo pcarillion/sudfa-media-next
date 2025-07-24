@@ -1,28 +1,6 @@
 import type { CollectionConfig, Field } from 'payload'
 
-// Champs techniques nécessaires pour éviter les warnings de déploiement
-const technicalFields: Field[] = process.env.NODE_ENV === 'production' || process.env.VERCEL ? [
-  // Champs Cloudinary (évite les warnings de suppression)
-  { name: 'cloudinary_public_id', type: 'text', admin: { hidden: true } },
-  { name: 'cloudinary_url', type: 'text', admin: { hidden: true } },
-  { name: 'cloudinary_resource_type', type: 'text', admin: { hidden: true } },
-  { name: 'cloudinary_format', type: 'text', admin: { hidden: true } },
-  { name: 'cloudinary_version', type: 'text', admin: { hidden: true } },
-  { name: 'original_url', type: 'text', admin: { hidden: true } },
-  { name: 'transformed_url', type: 'text', admin: { hidden: true } },
-  // Champs standards d'upload Payload
-  { name: 'url', type: 'text', admin: { hidden: true } },
-  { name: 'thumbnailURL', type: 'text', admin: { hidden: true } },
-  { name: 'filename', type: 'text', admin: { hidden: true } },
-  { name: 'mimeType', type: 'text', admin: { hidden: true } },
-  { name: 'filesize', type: 'number', admin: { hidden: true } },
-  { name: 'width', type: 'number', admin: { hidden: true } },
-  { name: 'height', type: 'number', admin: { hidden: true } },
-  { name: 'focalX', type: 'number', admin: { hidden: true } },
-  { name: 'focalY', type: 'number', admin: { hidden: true } },
-] : [
-  
-]
+
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -67,6 +45,5 @@ export const Media: CollectionConfig = {
       },
       index: true,
     },
-    ...technicalFields,
   ],
 }
