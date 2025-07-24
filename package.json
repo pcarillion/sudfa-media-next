@@ -19,7 +19,7 @@
     "migrate:authors": "tsx src/scripts/migrate-contentful-authors.ts",
     "migrate:authors:prod": "tsx src/scripts/migrate-contentful-authors.ts --prod",
     "migrate:categories": "tsx src/scripts/migrate-contentful-categories.ts",
-    "migrate:categories:prod": "tsx src/scripts/migrate-contentful-categories.ts --prod",
+    "migrate:categories:prod": "tsx src/scripts/migrate-contentful-categories.ts --prod"
   },
   "dependencies": {
     "@contentful/rich-text-html-renderer": "^16.5.2",
