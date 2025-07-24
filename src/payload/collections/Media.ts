@@ -1,4 +1,28 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, Field } from 'payload'
+
+// Champs techniques nécessaires pour éviter les warnings de déploiement
+const technicalFields: Field[] = process.env.NODE_ENV === 'production' || process.env.VERCEL ? [
+  // Champs Cloudinary (évite les warnings de suppression)
+  { name: 'cloudinaryPublicId', type: 'text', admin: { hidden: true } },
+  { name: 'cloudinaryUrl', type: 'text', admin: { hidden: true } },
+  { name: 'cloudinaryResourceType', type: 'text', admin: { hidden: true } },
+  { name: 'cloudinaryFormat', type: 'text', admin: { hidden: true } },
+  { name: 'cloudinaryVersion', type: 'text', admin: { hidden: true } },
+  { name: 'originalUrl', type: 'text', admin: { hidden: true } },
+  { name: 'transformedUrl', type: 'text', admin: { hidden: true } },
+  // Champs standards d'upload Payload
+  { name: 'url', type: 'text', admin: { hidden: true } },
+  { name: 'thumbnailURL', type: 'text', admin: { hidden: true } },
+  { name: 'filename', type: 'text', admin: { hidden: true } },
+  { name: 'mimeType', type: 'text', admin: { hidden: true } },
+  { name: 'filesize', type: 'number', admin: { hidden: true } },
+  { name: 'width', type: 'number', admin: { hidden: true } },
+  { name: 'height', type: 'number', admin: { hidden: true } },
+  { name: 'focalX', type: 'number', admin: { hidden: true } },
+  { name: 'focalY', type: 'number', admin: { hidden: true } },
+] : [
+  
+]
 
 export const Media: CollectionConfig = {
   slug: 'media',
@@ -43,14 +67,6 @@ export const Media: CollectionConfig = {
       },
       index: true,
     },
-    // {
-    //   name: 'originalUrl',
-    //   type: 'text',
-    //   label: 'URL d\'origine',
-    //   admin: {
-    //     description: 'URL originale de l\'image dans Contentful',
-    //     readOnly: true,
-    //   },
-    // },
+    ...technicalFields,
   ],
 }
