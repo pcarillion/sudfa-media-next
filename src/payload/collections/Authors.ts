@@ -60,5 +60,15 @@ export const Authors: CollectionConfig = {
       required: true,
       label: 'Photo de l\'auteur',
     },
+    {
+      name: 'contentfulId',
+      type: 'text',
+      label: 'ID Contentful',
+      admin: {
+        description: 'ID de l\'auteur Contentful d\'origine (pour traçabilité)',
+        readOnly: true,
+      },
+      index: true,
+    },
   ],
 }

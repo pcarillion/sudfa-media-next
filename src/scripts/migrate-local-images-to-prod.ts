@@ -1,3 +1,4 @@
+import { createClient } from 'contentful'
 import { getPayload } from 'payload'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
@@ -22,55 +23,73 @@ dotenv.config({ path: path.resolve(process.cwd(), '.env.local') })
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
-// Interface pour les images locales
-interface LocalImageFile {
-  filename: string
-  filePath: string
-  stats: {
-    size: number
-    mtime: Date
+// Types pour Contentful Assets
+interface ContentfulAsset {
+  sys: {
+    id: string
+    createdAt: string
+    updatedAt: string
   }
-}
-
-async function getLocalImages(): Promise<LocalImageFile[]> {
-  const mediaDir = path.resolve(process.cwd(), 'media')
-  
-  try {
-    const files = await fs.readdir(mediaDir, { withFileTypes: true })
-    const imageFiles: LocalImageFile[] = []
-    
-    for (const file of files) {
-      if (file.isFile() && /\.(jpg|jpeg|png|gif|webp|avif|svg)$/i.test(file.name)) {
-        const filePath = path.join(mediaDir, file.name)
-        const stats = await fs.stat(filePath)
-        
-        imageFiles.push({
-          filename: file.name,
-          filePath,
-          stats: {
-            size: stats.size,
-            mtime: stats.mtime
-          }
-        })
+  fields: {
+    title: string
+    description?: string
+    file: {
+      url: string
+      details: {
+        size: number
+        image?: {
+          width: number
+          height: number
+        }
       }
+      fileName: string
+      contentType: string
     }
-    
-    return imageFiles
-  } catch (error) {
-    console.log('📁 Dossier media non trouvé, aucune image à migrer')
-    return []
   }
 }
 
-async function migrateLocalImagesToProd() {
-  console.log('🚀 Démarrage de la migration des images locales vers la base de données de production')
+interface ContentfulResponse {
+  items: ContentfulAsset[]
+  total: number
+  skip: number
+  limit: number
+}
+
+async function downloadImage(url: string, filename: string): Promise<Buffer> {
+  console.log(`📥 Téléchargement de l'image: ${filename}`)
+  
+  // Ajouter https: si l'URL commence par //
+  const fullUrl = url.startsWith('//') ? `https:${url}` : url
+  
+  const response = await fetch(fullUrl)
+  if (!response.ok) {
+    throw new Error(`Erreur lors du téléchargement: ${response.statusText}`)
+  }
+  
+  const arrayBuffer = await response.arrayBuffer()
+  return Buffer.from(arrayBuffer)
+}
+
+async function migrateContentfulImagesToProd() {
+  console.log('🚀 Démarrage de la migration des images Contentful vers la base de données de PRODUCTION')
   
   // Vérifier les variables d'environnement
   console.log('🔍 Variables d\'environnement:')
-  console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'Défini' : 'Manquant')
+  console.log('CONTENTFUL_SPACE_ID:', process.env.CONTENTFUL_SPACE_ID ? 'Défini' : 'Manquant')
+  console.log('CONTENTFUL_ACCESS_TOKEN:', process.env.CONTENTFUL_ACCESS_TOKEN ? 'Défini' : 'Manquant')
+  console.log('NETLIFY_DATABASE_URL:', process.env.NETLIFY_DATABASE_URL ? 'Défini' : 'Manquant')
   console.log('PAYLOAD_SECRET:', process.env.PAYLOAD_SECRET ? 'Défini' : 'Manquant')
   
-  // Configuration Payload pour la production
+  // Dynamic import for cloudinary storage
+  const { cloudinaryStorage } = await import('payload-storage-cloudinary')
+  
+  // Configuration Contentful
+  const contentful = createClient({
+    space: process.env.CONTENTFUL_SPACE_ID!,
+    accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
+  })
+  
+  // Configuration Payload pour la PRODUCTION avec Cloudinary
   const payloadConfig = buildConfig({
     admin: {
       user: 'users',
@@ -93,9 +112,22 @@ async function migrateLocalImagesToProd() {
     },
     db: postgresAdapter({
       pool: {
-        connectionString: process.env.DATABASE_URL!,
+        connectionString: process.env.NETLIFY_DATABASE_URL!, // URL de production
       },
+      push: true, // Activé temporairement pour créer les colonnes Cloudinary
     }),
+    plugins: [
+      cloudinaryStorage({
+        cloudConfig: {
+          cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+          api_key: process.env.CLOUDINARY_API_KEY,
+          api_secret: process.env.CLOUDINARY_API_SECRET,
+        },
+        collections: {
+          media: true,
+        },
+      }),
+    ],
     sharp,
   })
 
@@ -103,93 +135,109 @@ async function migrateLocalImagesToProd() {
   const payload = await getPayload({ config: payloadConfig })
   
   try {
-    // Récupérer les images locales
-    const localImages = await getLocalImages()
-    
-    if (localImages.length === 0) {
-      console.log('📂 Aucune image trouvée dans le dossier media/')
-      return
-    }
-    
-    console.log(`📄 ${localImages.length} images trouvées dans le dossier media/`)
+    let skip = 0
+    const limit = 100
     let processedCount = 0
+    let skippedCount = 0
+    let errorCount = 0
     
-    // Traiter chaque image
-    for (const imageFile of localImages) {
-      try {
-        const { filename, filePath, stats } = imageFile
-        
-        // Vérifier si l'image existe déjà dans Payload (par nom de fichier)
-        const existing = await payload.find({
-          collection: 'media',
-          where: {
-            'filename': {
-              equals: filename
-            }
+    console.log('🌍 ATTENTION: Migration vers la base de données de PRODUCTION')
+    console.log('📊 Connexion à la base de production...')
+    
+    while (true) {
+      console.log(`📄 Récupération des assets ${skip + 1} à ${skip + limit}...`)
+      
+      // Récupérer les assets de Contentful
+      const response = await contentful.getAssets({
+        skip,
+        limit,
+        'fields.file.contentType[match]': 'image'
+      }) as any as ContentfulResponse
+      
+      if (response.items.length === 0) {
+        break
+      }
+      
+      console.log(`✅ ${response.items.length} images trouvées`)
+      
+      // Traiter chaque asset
+      for (const asset of response.items) {
+        try {
+          const { fields, sys } = asset
+          const file = fields.file
+          
+          if (!file) {
+            console.log(`⚠️  Pas de fichier pour l'asset ${sys.id}`)
+            continue
           }
-        })
-        
-        if (existing.docs.length > 0) {
-          console.log(`⏭️  Image déjà migrée: ${filename}`)
+          
+          // Vérifier si l'image existe déjà dans Payload (base de production)
+          const existing = await payload.find({
+            collection: 'media',
+            where: {
+              'contentfulId': {
+                equals: sys.id
+              }
+            }
+          })
+          
+          if (existing.docs.length > 0) {
+            console.log(`⏭️  Image déjà migrée en prod: ${fields.title}`)
+            skippedCount++
+            continue
+          }
+          
+          // Télécharger l'image depuis Contentful
+          const imageBuffer = await downloadImage(file.url, file.fileName)
+          
+          // Créer le média dans Payload PRODUCTION avec upload Cloudinary
+          const payloadMedia = await payload.create({
+            collection: 'media',
+            data: {
+              alt: fields.title || file.fileName,
+              legend: fields.description || '',
+              // Champs personnalisés pour traçabilité
+              contentfulId: sys.id,
+            },
+            file: {
+              data: imageBuffer,
+              mimetype: file.contentType,
+              name: file.fileName,
+              size: file.details.size
+            }
+          })
+          
+          console.log(`✅ Image migrée en PROD: ${fields.title} → ${payloadMedia.id}`)
+          processedCount++
+          
+          // Pause courte pour éviter de surcharger les APIs
+          await new Promise(resolve => setTimeout(resolve, 100))
+          
+        } catch (error) {
+          console.error(`❌ Erreur lors de la migration de l'asset ${asset.sys.id}:`, error)
+          errorCount++
           continue
         }
-        
-        // Lire le fichier image
-        console.log(`📥 Migration de l'image: ${filename}`)
-        const imageBuffer = await fs.readFile(filePath)
-        
-        // Déterminer le type MIME
-        const ext = path.extname(filename).toLowerCase()
-        let mimeType = 'image/jpeg'
-        
-        switch (ext) {
-          case '.png':
-            mimeType = 'image/png'
-            break
-          case '.gif':
-            mimeType = 'image/gif'
-            break
-          case '.webp':
-            mimeType = 'image/webp'
-            break
-          case '.avif':
-            mimeType = 'image/avif'
-            break
-          case '.svg':
-            mimeType = 'image/svg+xml'
-            break
-          default:
-            mimeType = 'image/jpeg'
-        }
-        
-        // Créer le média dans Payload
-        const payloadMedia = await payload.create({
-          collection: 'media',
-          data: {
-            alt: path.parse(filename).name,
-            legend: `Image migrée depuis le dossier local le ${new Date().toLocaleDateString('fr-FR')}`,
-          },
-          file: {
-            data: imageBuffer,
-            mimetype: mimeType,
-            name: filename,
-            size: stats.size
-          }
-        })
-        
-        console.log(`✅ Image migrée: ${filename} → ${payloadMedia.id}`)
-        processedCount++
-        
-      } catch (error) {
-        console.error(`❌ Erreur lors de la migration de ${imageFile.filename}:`, error)
-        continue
+      }
+      
+      skip += limit
+      
+      // Éviter de surcharger l'API
+      if (response.items.length < limit) {
+        break
       }
     }
     
-    console.log(`🎉 Migration terminée ! ${processedCount} images migrées avec succès`)
+    console.log('\n🎉 MIGRATION PRODUCTION TERMINÉE !')
+    console.log(`📊 Statistiques:`)
+    console.log(`   ✅ Images migrées: ${processedCount}`)
+    console.log(`   ⏭️  Images déjà présentes: ${skippedCount}`)
+    console.log(`   ❌ Erreurs: ${errorCount}`)
+    console.log(`   🌍 Destination: BASE DE DONNÉES DE PRODUCTION`)
+    console.log(`   ☁️  Stockage: Cloudinary`)
     
   } catch (error) {
-    console.error('❌ Erreur lors de la migration:', error)
+    console.error('❌ Erreur lors de la migration vers la production:', error)
     throw error
   } finally {
     // Fermer les connexions
@@ -201,15 +249,15 @@ async function migrateLocalImagesToProd() {
 
 // Exécuter le script si appelé directement
 if (import.meta.url === `file://${process.argv[1]}`) {
-  migrateLocalImagesToProd()
+  migrateContentfulImagesToProd()
     .then(() => {
-      console.log('✅ Script de migration terminé')
+      console.log('✅ Script de migration vers la PRODUCTION terminé')
       process.exit(0)
     })
     .catch((error) => {
-      console.error('❌ Erreur fatale:', error)
+      console.error('❌ Erreur fatale lors de la migration PRODUCTION:', error)
       process.exit(1)
     })
 }
 
-export default migrateLocalImagesToProd
+export default migrateContentfulImagesToProd

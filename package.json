@@ -16,6 +16,8 @@
     "payload:migrate:create": "payload migrate:create",
     "migrate:images": "tsx src/scripts/migrate-contentful-images.ts",
     "migrate:images:prod": "tsx src/scripts/migrate-local-images-to-prod.ts",
+    "migrate:authors": "tsx src/scripts/migrate-contentful-authors.ts",
+    "migrate:authors:prod": "tsx src/scripts/migrate-contentful-authors.ts --prod",
     "setup:prod": "tsx src/scripts/check-payload-prod.ts",
     "db:push": "payload db:push"
   },
@@ -34,6 +36,7 @@
     "lucide-react": "^0.525.0",
     "moment": "^2.30.1",
     "next": "^15.4.2",
+    "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.13",
     "payload": "^3.48.0",
     "payload-cloudinary": "^1.7.0",
