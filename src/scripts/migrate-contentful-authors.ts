@@ -101,6 +101,7 @@ async function migrateContentfulAuthors(options: MigrationOptions = {}) {
           // Chercher l'image correspondante si elle existe
           let photoId = null
           if (fields.photo?.sys?.id) {
+            // @ts-expect-error
             photoId = await findMediaByContentfulId(payload, fields.photo.sys.id)
             
             if (photoId) {

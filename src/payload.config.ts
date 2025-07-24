@@ -42,7 +42,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
-    push: false, // Temporarily enabled to recreate media table
+    push: false, // Enabled to recreate media table with correct schema
     // logger: process.env.NODE_ENV === 'development',
   }),
   sharp,
