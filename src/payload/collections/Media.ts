@@ -3,13 +3,13 @@ import type { CollectionConfig, Field } from 'payload'
 // Champs techniques nécessaires pour éviter les warnings de déploiement
 const technicalFields: Field[] = process.env.NODE_ENV === 'production' || process.env.VERCEL ? [
   // Champs Cloudinary (évite les warnings de suppression)
-  { name: 'cloudinaryPublicId', type: 'text', admin: { hidden: true } },
-  { name: 'cloudinaryUrl', type: 'text', admin: { hidden: true } },
-  { name: 'cloudinaryResourceType', type: 'text', admin: { hidden: true } },
-  { name: 'cloudinaryFormat', type: 'text', admin: { hidden: true } },
-  { name: 'cloudinaryVersion', type: 'text', admin: { hidden: true } },
-  { name: 'originalUrl', type: 'text', admin: { hidden: true } },
-  { name: 'transformedUrl', type: 'text', admin: { hidden: true } },
+  { name: 'cloudinary_public_id', type: 'text', admin: { hidden: true } },
+  { name: 'cloudinary_url', type: 'text', admin: { hidden: true } },
+  { name: 'cloudinary_resource_type', type: 'text', admin: { hidden: true } },
+  { name: 'cloudinary_format', type: 'text', admin: { hidden: true } },
+  { name: 'cloudinary_version', type: 'text', admin: { hidden: true } },
+  { name: 'original_url', type: 'text', admin: { hidden: true } },
+  { name: 'transformed_url', type: 'text', admin: { hidden: true } },
   // Champs standards d'upload Payload
   { name: 'url', type: 'text', admin: { hidden: true } },
   { name: 'thumbnailURL', type: 'text', admin: { hidden: true } },
