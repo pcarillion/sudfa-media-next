@@ -18,6 +18,8 @@
     "migrate:images:prod": "tsx src/scripts/migrate-local-images-to-prod.ts",
     "migrate:authors": "tsx src/scripts/migrate-contentful-authors.ts",
     "migrate:authors:prod": "tsx src/scripts/migrate-contentful-authors.ts --prod",
+    "migrate:categories": "tsx src/scripts/migrate-contentful-categories.ts",
+    "migrate:categories:prod": "tsx src/scripts/migrate-contentful-categories.ts --prod",
     "setup:prod": "tsx src/scripts/check-payload-prod.ts",
     "db:push": "payload db:push"
   },

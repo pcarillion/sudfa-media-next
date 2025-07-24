@@ -25,5 +25,15 @@ export const Categories: CollectionConfig = {
       type: 'textarea',
       label: 'Description',
     },
+    {
+      name: 'contentfulId',
+      type: 'text',
+      label: 'ID Contentful',
+      admin: {
+        description: 'ID de la catégorie Contentful d\'origine (pour traçabilité)',
+        readOnly: true,
+      },
+      index: true,
+    },
   ],
 }

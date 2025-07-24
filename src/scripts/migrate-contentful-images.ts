@@ -1,28 +1,14 @@
-import { createClient } from 'contentful'
-import { getPayload } from 'payload'
-import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import { buildConfig } from 'payload'
-import sharp from 'sharp'
-import fs from 'fs/promises'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import dotenv from 'dotenv'
-// Dynamic import will be done in the function
-
-// Collections
-import { Users } from '../payload/collections/Users'
-import { Categories } from '../payload/collections/Categories'
-import { Authors } from '../payload/collections/Authors'
-import { Articles } from '../payload/collections/Articles'
-import { Presentations } from '../payload/collections/Presentations'
-import { Media } from '../payload/collections/Media'
-
-// Charger les variables d'environnement depuis .env.local
-dotenv.config({ path: path.resolve(process.cwd(), '.env.local') })
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+import { createContentfulClient, downloadImageFromContentful } from './utils/contentful-client'
+import {
+  initializePayloadForMigration,
+  closePayloadConnections,
+  logEnvironmentStatus,
+  logMigrationStats,
+  addDelay,
+  checkIfExists,
+  MigrationStats,
+  MigrationOptions
+} from './utils/migration-helpers'
 
 // Types pour Contentful Assets
 interface ContentfulAsset {
@@ -56,96 +42,31 @@ interface ContentfulResponse {
   limit: number
 }
 
-async function downloadImage(url: string, filename: string): Promise<Buffer> {
-  console.log(`📥 Téléchargement de l'image: ${filename}`)
+async function migrateContentfulImages(options: MigrationOptions = {}) {
+  const { isProduction = false, batchSize = 100, delay = 100 } = options
+  const envLabel = isProduction ? 'PRODUCTION' : 'LOCAL'
   
-  // Ajouter https: si l'URL commence par //
-  const fullUrl = url.startsWith('//') ? `https:${url}` : url
+  console.log(`🚀 Démarrage de la migration des images Contentful vers Payload (${envLabel})`)
   
-  const response = await fetch(fullUrl)
-  if (!response.ok) {
-    throw new Error(`Erreur lors du téléchargement: ${response.statusText}`)
-  }
+  // Afficher le statut des variables d'environnement
+  logEnvironmentStatus(isProduction)
   
-  const arrayBuffer = await response.arrayBuffer()
-  return Buffer.from(arrayBuffer)
-}
-
-async function migrateContentfulImages() {
-  console.log('🚀 Démarrage de la migration des images Contentful vers Payload')
+  // Initialiser les clients
+  const contentful = createContentfulClient()
+  const payload = await initializePayloadForMigration(options)
   
-  // Vérifier les variables d'environnement
-  console.log('🔍 Variables d\'environnement:')
-  console.log('CONTENTFUL_SPACE_ID:', process.env.CONTENTFUL_SPACE_ID ? 'Défini' : 'Manquant')
-  console.log('CONTENTFUL_ACCESS_TOKEN:', process.env.CONTENTFUL_ACCESS_TOKEN ? 'Défini' : 'Manquant')
-  console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'Défini' : 'Manquant')
-  console.log('PAYLOAD_SECRET:', process.env.PAYLOAD_SECRET ? 'Défini' : 'Manquant')
-  
-  // Dynamic import for cloudinary storage
-  const { cloudinaryStorage } = await import('payload-storage-cloudinary')
-  
-  // Configuration Contentful
-  const contentful = createClient({
-    space: process.env.CONTENTFUL_SPACE_ID!,
-    accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
-  })
-  
-  // Configuration Payload inline
-  const payloadConfig = buildConfig({
-    admin: {
-      user: 'users',
-      importMap: {
-        baseDir: path.resolve(__dirname, '..'),
-      },
-    },
-    collections: [
-      Users,
-      Categories,
-      Authors,
-      Articles,
-      Presentations,
-      Media,
-    ],
-    editor: lexicalEditor({}),
-    secret: process.env.PAYLOAD_SECRET!,
-    typescript: {
-      outputFile: path.resolve(__dirname, '..', 'payload-types.ts'),
-    },
-    db: postgresAdapter({
-      pool: {
-        connectionString: process.env.DATABASE_URL!,
-      },
-    }),
-    plugins: [
-      cloudinaryStorage({
-        cloudConfig: {
-          cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-          api_key: process.env.CLOUDINARY_API_KEY,
-          api_secret: process.env.CLOUDINARY_API_SECRET,
-        },
-        collections: {
-          media: true,
-        },
-      }),
-    ],
-    sharp,
-  })
-
-  // Initialiser Payload
-  const payload = await getPayload({ config: payloadConfig })
+  const stats: MigrationStats = { processed: 0, skipped: 0, errors: 0 }
   
   try {
     let skip = 0
-    const limit = 100
-    let processedCount = 0
     
     while (true) {
-      console.log(`📄 Récupération des assets ${skip + 1} à ${skip + limit}...`)
+      console.log(`📄 Récupération des assets ${skip + 1} à ${skip + batchSize}...`)
       
       // Récupérer les assets de Contentful
       const response = await contentful.getAssets({
         skip,
-        limit,
+        limit: batchSize,
         'fields.file.contentType[match]': 'image'
       }) as any as ContentfulResponse
       
@@ -167,22 +88,16 @@ async function migrateContentfulImages() {
           }
           
           // Vérifier si l'image existe déjà dans Payload
-          const existing = await payload.find({
-            collection: 'media',
-            where: {
-              'contentfulId': {
-                equals: sys.id
-              }
-            }
-          })
+          const exists = await checkIfExists(payload, 'media', 'contentfulId', sys.id)
           
-          if (existing.docs.length > 0) {
+          if (exists) {
             console.log(`⏭️  Image déjà migrée: ${fields.title}`)
+            stats.skipped++
             continue
           }
           
           // Télécharger l'image
-          const imageBuffer = await downloadImage(file.url, file.fileName)
+          const imageBuffer = await downloadImageFromContentful(file.url, file.fileName)
           
           // Créer le média dans Payload
           const payloadMedia = await payload.create({
@@ -192,7 +107,6 @@ async function migrateContentfulImages() {
               legend: fields.description || '',
               // Champs personnalisés pour traçabilité
               contentfulId: sys.id,
-              // originalUrl: file.url
             },
             file: {
               data: imageBuffer,
@@ -203,40 +117,45 @@ async function migrateContentfulImages() {
           })
           
           console.log(`✅ Image migrée: ${fields.title} → ${payloadMedia.id}`)
-          processedCount++
+          stats.processed++
+          
+          // Pause pour éviter de surcharger les APIs
+          await addDelay(delay)
           
         } catch (error) {
           console.error(`❌ Erreur lors de la migration de l'asset ${asset.sys.id}:`, error)
+          stats.errors++
           continue
         }
       }
       
-      skip += limit
+      skip += batchSize
       
       // Éviter de surcharger l'API
-      if (response.items.length < limit) {
+      if (response.items.length < batchSize) {
         break
       }
     }
     
-    console.log(`🎉 Migration terminée ! ${processedCount} images migrées avec succès`)
+    // Afficher les statistiques finales
+    logMigrationStats(stats, 'images', isProduction)
     
   } catch (error) {
     console.error('❌ Erreur lors de la migration:', error)
     throw error
   } finally {
     // Fermer les connexions
-    if (payload.db && typeof payload.db.destroy === 'function') {
-      await payload.db.destroy()
-    }
+    await closePayloadConnections(payload)
   }
 }
 
 // Exécuter le script si appelé directement
 if (import.meta.url === `file://${process.argv[1]}`) {
-  migrateContentfulImages()
+  const isProduction = process.argv.includes('--prod')
+  
+  migrateContentfulImages({ isProduction })
     .then(() => {
-      console.log('✅ Script de migration terminé')
+      console.log(`✅ Script de migration images ${isProduction ? 'PRODUCTION' : 'LOCAL'} terminé`)
       process.exit(0)
     })
     .catch((error) => {
