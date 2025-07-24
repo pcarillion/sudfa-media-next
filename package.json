@@ -36,6 +36,8 @@
     "next": "^15.4.2",
     "nodemailer": "^6.9.13",
     "payload": "^3.48.0",
+    "payload-cloudinary": "^1.7.0",
+    "payload-storage-cloudinary": "^1.1.3",
     "qs": "^6.12.1",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

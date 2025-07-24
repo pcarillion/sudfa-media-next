@@ -8,6 +8,7 @@ import fs from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import dotenv from 'dotenv'
+// Dynamic import will be done in the function
 
 // Collections
 import { Users } from '../payload/collections/Users'
@@ -80,6 +81,9 @@ async function migrateContentfulImages() {
   console.log('DATABASE_URL:', process.env.DATABASE_URL ? 'Défini' : 'Manquant')
   console.log('PAYLOAD_SECRET:', process.env.PAYLOAD_SECRET ? 'Défini' : 'Manquant')
   
+  // Dynamic import for cloudinary storage
+  const { cloudinaryStorage } = await import('payload-storage-cloudinary')
+  
   // Configuration Contentful
   const contentful = createClient({
     space: process.env.CONTENTFUL_SPACE_ID!,
@@ -112,6 +116,18 @@ async function migrateContentfulImages() {
         connectionString: process.env.DATABASE_URL!,
       },
     }),
+    plugins: [
+      cloudinaryStorage({
+        cloudConfig: {
+          cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+          api_key: process.env.CLOUDINARY_API_KEY,
+          api_secret: process.env.CLOUDINARY_API_SECRET,
+        },
+        collections: {
+          media: true,
+        },
+      }),
+    ],
     sharp,
   })
 
@@ -176,7 +192,7 @@ async function migrateContentfulImages() {
               legend: fields.description || '',
               // Champs personnalisés pour traçabilité
               contentfulId: sys.id,
-              originalUrl: file.url
+              // originalUrl: file.url
             },
             file: {
               data: imageBuffer,

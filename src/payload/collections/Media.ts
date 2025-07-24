@@ -2,25 +2,6 @@ import type { CollectionConfig } from 'payload'
 
 export const Media: CollectionConfig = {
   slug: 'media',
-  upload: {
-    staticDir: 'media',
-    imageSizes: [
-      {
-        name: 'thumbnail',
-        width: 400,
-        height: 300,
-        position: 'centre',
-      },
-      {
-        name: 'card',
-        width: 768,
-        height: 1024,
-        position: 'centre',
-      },
-    ],
-    adminThumbnail: 'thumbnail',
-    mimeTypes: ['image/*'],
-  },
   fields: [
     {
       name: 'alt',
@@ -42,15 +23,6 @@ export const Media: CollectionConfig = {
         readOnly: true,
       },
       index: true,
-    },
-    {
-      name: 'originalUrl',
-      type: 'text',
-      label: 'URL d\'origine',
-      admin: {
-        description: 'URL originale de l\'image dans Contentful',
-        readOnly: true,
-      },
     },
   ],
 }
