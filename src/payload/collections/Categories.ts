@@ -25,5 +25,11 @@ export const Categories: CollectionConfig = {
       type: 'textarea',
       label: 'Description',
     },
+
+    {
+      name: 'contentful_id',
+      type: 'text',
+      hidden: true,
+    },
   ],
 }
