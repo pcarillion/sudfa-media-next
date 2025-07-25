@@ -219,5 +219,46 @@ export const PayloadAPIActions = async (): Promise<APIHandler> => {
 
       return apropos;
     },
+
+    // Search
+    async searchArticles(query: string, limit: number = 10): Promise<Article[]> {
+      if (!query || query.trim().length === 0) {
+        return [];
+      }
+
+      const { docs } = await payload.find({
+        collection: "articles",
+        where: {
+          titre: {
+            contains: query.trim(),
+          },
+        },
+        sort: "-date",
+        limit,
+        depth: 2,
+      });
+
+      return docs;
+    },
+
+    async searchArticlesAutocomplete(query: string): Promise<Article[]> {
+      if (!query || query.trim().length < 2) {
+        return [];
+      }
+
+      const { docs } = await payload.find({
+        collection: "articles",
+        where: {
+          titre: {
+            contains: query.trim(),
+          },
+        },
+        sort: "-date",
+        limit: 5,
+        depth: 1, // Moins de profondeur pour l'autocomplétion
+      });
+
+      return docs;
+    },
   };
 };

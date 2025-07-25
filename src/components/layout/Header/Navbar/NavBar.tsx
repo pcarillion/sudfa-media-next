@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { NavItem } from "./NavBar.types";
 import { usePathname } from "next/navigation";
+import { Search } from "lucide-react";
 
 interface NavBarProps {
   navItems: NavItem[];
@@ -51,7 +52,7 @@ export const Navbar = ({ navItems }: NavBarProps) => {
             pathName === "/auteurs" ? "font-bold" : ""
           } hover:no-underline hover:opacity-70`}
         >
-          <li className="px-4 m-2 hover:no-underline">L&lsquo;Equipe</li>
+          <li className="px-4 m-2 hover:no-underline">L&apos;Equipe</li>
         </Link>
         <Link
           href={`/a-propos`}
@@ -60,6 +61,14 @@ export const Navbar = ({ navItems }: NavBarProps) => {
           } hover:no-underline hover:opacity-70`}
         >
           <li className="px-4 m-2 hover:no-underline">A propos</li>
+        </Link>
+        <Link
+          href="/recherche"
+          className={`${pathName === "/recherche" ? "font-bold" : ""} hover:no-underline hover:opacity-70`}
+        >
+          <li className="px-4 m-2 hover:no-underline h-full">
+            <Search className="h-5 w-5" />
+          </li>
         </Link>
       </ul>
       {/* Mobile Navigation Icon */}

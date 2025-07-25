@@ -32,4 +32,8 @@ export interface APIHandler {
 
   getLinksGlobal(): Promise<Link>;
   getAPropos(): Promise<Apropo>;
+
+  // Search
+  searchArticles(query: string, limit?: number): Promise<Article[]>;
+  searchArticlesAutocomplete(query: string): Promise<Article[]>;
 }
