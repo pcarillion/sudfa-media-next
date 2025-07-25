@@ -2,7 +2,7 @@ import type { GlobalConfig } from "payload";
 
 export const APropos: GlobalConfig = {
   slug: "apropos",
-  label: "A propos",
+  label: "Page « A propos »",
   fields: [
     {
       name: "content",

@@ -2,7 +2,7 @@ import type { GlobalConfig } from "payload";
 
 export const Une: GlobalConfig = {
   slug: "une",
-  label: "A la Une",
+  label: "Articles à la Une",
   admin: {
     description: "Gérez les articles de la Une (6 articles maximum)",
   },

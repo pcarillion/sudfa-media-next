@@ -1,74 +1,78 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from "payload";
 
 export const Authors: CollectionConfig = {
-  slug: 'authors',
+  slug: "authors",
   admin: {
-    useAsTitle: 'name',
-    defaultColumns: ['name', 'type', 'slug', 'updatedAt'],
+    useAsTitle: "name",
+    defaultColumns: ["name", "type", "slug", "updatedAt"],
+  },
+  labels: {
+    singular: "Auteur",
+    plural: "Auteurs",
   },
   fields: [
     {
-      name: 'name',
-      type: 'text',
+      name: "name",
+      type: "text",
       required: true,
-      label: 'Nom de l\'auteur',
+      label: "Nom de l'auteur",
     },
     {
-      name: 'type',
-      type: 'select',
+      name: "type",
+      type: "select",
       required: true,
-      label: 'Type d\'auteur',
+      label: "Type d'auteur",
       options: [
         {
-          label: 'Équipe',
-          value: 'equipe',
+          label: "Équipe",
+          value: "equipe",
         },
         {
-          label: 'Contributeur',
-          value: 'contributeur',
+          label: "Contributeur",
+          value: "contributeur",
         },
         {
-          label: 'Auteur',
-          value: 'auteur',
+          label: "Auteur",
+          value: "auteur",
         },
       ],
-      defaultValue: 'auteur',
+      defaultValue: "auteur",
       admin: {
-        description: 'Sélectionnez le type d\'auteur',
+        description: "Sélectionnez le type d'auteur",
       },
     },
     {
-      name: 'slug',
-      type: 'text',
+      name: "slug",
+      type: "text",
       required: true,
       unique: true,
-      label: 'Slug',
+      label: "Slug",
       admin: {
-        description: 'URL-friendly version du nom',
+        description: "URL-friendly version du nom",
       },
     },
     {
-      name: 'description',
-      type: 'textarea',
+      name: "description",
+      type: "textarea",
       required: true,
-      label: 'Description',
+      label: "Description",
     },
     {
-      name: 'photo',
-      type: 'upload',
-      relationTo: 'media',
+      name: "photo",
+      type: "upload",
+      relationTo: "media",
       required: true,
-      label: 'Photo de l\'auteur',
+      label: "Photo de l'auteur",
     },
     {
-      name: 'contentfulId',
-      type: 'text',
-      label: 'ID Contentful',
+      name: "contentfulId",
+      type: "text",
+      label: "ID Contentful",
       admin: {
-        description: 'ID de l\'auteur Contentful d\'origine (pour traçabilité)',
+        description: "ID de l'auteur Contentful d'origine (pour traçabilité)",
         readOnly: true,
       },
       index: true,
     },
   ],
-}
+};

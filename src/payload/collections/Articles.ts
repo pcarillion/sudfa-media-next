@@ -1,88 +1,92 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from "payload";
 
 export const Articles: CollectionConfig = {
-  slug: 'articles',
+  slug: "articles",
   admin: {
-    useAsTitle: 'titre',
-    defaultColumns: ['titre', 'date', 'category', 'authors', 'updatedAt'],
+    useAsTitle: "titre",
+    defaultColumns: ["titre", "date", "category", "authors", "updatedAt"],
+  },
+  labels: {
+    singular: "Article",
+    plural: "Articles",
   },
   fields: [
     {
-      name: 'titre',
-      type: 'text',
+      name: "titre",
+      type: "text",
       required: true,
-      label: 'Titre de l\'article',
+      label: "Titre de l'article",
     },
     {
-      name: 'slug',
-      type: 'text',
+      name: "slug",
+      type: "text",
       required: true,
       unique: true,
-      label: 'Slug',
+      label: "Slug",
       admin: {
-        description: 'URL-friendly version du titre',
+        description: "URL-friendly version du titre",
       },
     },
     {
-      name: 'date',
-      type: 'date',
+      name: "date",
+      type: "date",
       required: true,
-      label: 'Date de publication',
+      label: "Date de publication",
       defaultValue: () => new Date().toISOString(),
     },
     {
-      name: 'category',
-      type: 'relationship',
-      relationTo: 'categories',
+      name: "category",
+      type: "relationship",
+      relationTo: "categories",
       required: true,
-      label: 'Catégorie',
+      label: "Catégorie",
     },
     {
-      name: 'authors',
-      type: 'relationship',
-      relationTo: 'authors',
+      name: "authors",
+      type: "relationship",
+      relationTo: "authors",
       hasMany: true,
       required: true,
-      label: 'Auteurs',
+      label: "Auteurs",
     },
     {
-      name: 'photoPrincipale',
-      type: 'upload',
-      relationTo: 'media',
+      name: "photoPrincipale",
+      type: "upload",
+      relationTo: "media",
       required: false,
-      label: 'Photo principale',
+      label: "Photo principale",
     },
     {
-      name: 'presentation',
-      type: 'richText',
-      label: 'Présentation',
+      name: "presentation",
+      type: "richText",
+      label: "Présentation",
       admin: {
-        description: 'Courte présentation de l\'article',
+        description: "Courte présentation de l'article",
       },
     },
     {
-      name: 'article',
-      type: 'richText',
-      label: 'Contenu de l\'article',
+      name: "article",
+      type: "richText",
+      label: "Contenu de l'article",
       admin: {
-        description: 'Contenu principal de l\'article',
+        description: "Contenu principal de l'article",
       },
     },
     {
-      name: 'content_html',
-      type: 'textarea',
-      label: 'Contenu HTML',
+      name: "content_html",
+      type: "textarea",
+      label: "Contenu HTML",
       admin: {
-        description: 'Version HTML du contenu (généré automatiquement)',
+        description: "Version HTML du contenu (généré automatiquement)",
         readOnly: true,
       },
     },
     {
-      name: 'contentfulId',
-      type: 'text',
-      label: 'ID Contentful',
+      name: "contentfulId",
+      type: "text",
+      label: "ID Contentful",
       admin: {
-        description: 'ID de l\'article Contentful d\'origine (pour traçabilité)',
+        description: "ID de l'article Contentful d'origine (pour traçabilité)",
         readOnly: true,
       },
       index: true,
@@ -94,10 +98,10 @@ export const Articles: CollectionConfig = {
         // Auto-generate content_html from richText if needed
         if (data.article && !data.content_html) {
           // This would need proper rich text to HTML conversion
-          data.content_html = 'Generated HTML content'
+          data.content_html = "Generated HTML content";
         }
-        return data
+        return data;
       },
     ],
   },
-}
+};

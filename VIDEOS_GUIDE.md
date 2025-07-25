@@ -46,61 +46,35 @@ Le système de vidéos dans Lexical permet d'intégrer facilement des vidéos da
 
 ## Exemples d'utilisation
 
-### Vidéo YouTube simple
+### Vidéo YouTube
 ```json
 {
   "videoType": "youtube",
   "youtubeID": "dQw4w9WgXcQ",
-  "title": "Ma vidéo YouTube",
-  "aspectRatio": "16:9"
+  "title": "Ma vidéo YouTube"
 }
 ```
 
-### Vidéo avec options avancées
+### Vidéo Vimeo
 ```json
 {
-  "videoType": "youtube", 
-  "youtubeID": "dQw4w9WgXcQ",
-  "title": "Vidéo de démonstration",
-  "description": "Une démonstration complète de notre produit",
-  "autoplay": false,
-  "controls": true,
-  "loop": false,
-  "muted": false,
-  "width": 800,
-  "aspectRatio": "16:9"
-}
-```
-
-### Upload direct
-```json
-{
-  "videoType": "upload",
-  "videoFile": {
-    "id": "media_id",
-    "url": "/uploads/video.mp4"
-  },
-  "title": "Vidéo locale",
-  "controls": true
+  "videoType": "vimeo",
+  "vimeoID": "123456789",
+  "title": "Ma vidéo Vimeo"
 }
 ```
 
 ## Bonnes pratiques
 
 ### Performance
-- Utilisez `autoplay: false` par défaut pour économiser la bande passante
-- Définissez des largeurs maximales raisonnables
-- Préférez YouTube/Vimeo pour les vidéos publiques (CDN optimisé)
+- Les vidéos utilisent un chargement lazy par défaut
+- YouTube utilise le domaine `youtube-nocookie.com` pour éviter les cookies inutiles
 
 ### Accessibilité
-- Toujours renseigner un titre descriptif
-- Utilisez `muted: true` si `autoplay: true`
-- Ajoutez des descriptions pour le contexte
+- Toujours renseigner un titre descriptif quand possible
 
 ### SEO
 - Titres descriptifs et uniques
-- Descriptions détaillées
-- Ratios d'aspect cohérents pour l'apparence
 
 ## Développement
 
@@ -108,11 +82,6 @@ Le système de vidéos dans Lexical permet d'intégrer facilement des vidéos da
 - `src/payload/blocks/VideoBlock.ts` : Configuration Payload
 - `src/components/blocks/VideoBlock.tsx` : Composant React
 - `src/components/blocks/BlockRenderer.tsx` : Renderer générique
-- `src/utils/videoHelpers.ts` : Utilitaires vidéo
+- `src/components/ui/VideoIframe.tsx` : Composant iframe sécurisé
 
-### Extension
-Pour ajouter de nouveaux types de vidéos :
-1. Étendre l'enum `videoType` dans `VideoBlock.ts`
-2. Ajouter les champs nécessaires
-3. Implémenter le rendu dans `VideoBlock.tsx`
-4. Ajouter les utilitaires dans `videoHelpers.ts`
+Le système est maintenant volontairement simple et se concentre sur l'essentiel : afficher des vidéos YouTube et Vimeo de manière sécurisée.
