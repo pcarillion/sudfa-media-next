@@ -5,6 +5,7 @@ import { Container } from "@/components/common/Container";
 import { H1 } from "@/components/common/ui/H1";
 import { H3 } from "@/components/common/ui/H3";
 import { Typography } from "@/components/common/ui/Typography";
+import { ArticleLexicalRenderer } from "@/components/utils/LexicalRenderer/ArticleLexicalRenderer";
 import LexicalRenderer from "@/components/utils/LexicalRenderer/LexicalRenderer";
 import { Api } from "@/lib/api";
 import { Author, Category, Media } from "@/payload-types";
@@ -52,7 +53,7 @@ export const ArticleContainer = async ({ slug }: { slug: string }) => {
               </Typography>
             </>
           )}
-          <LexicalRenderer content={article.article} />
+          <ArticleLexicalRenderer content={article.article} />
         </div>
         {(article.authors as Author[]).map(author => {
           return <AuthorCard key={author.id} author={author} />;

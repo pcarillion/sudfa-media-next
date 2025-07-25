@@ -1,30 +1,31 @@
-import { postgresAdapter } from '@payloadcms/db-postgres'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
-import path from 'path'
-import { buildConfig } from 'payload'
-import sharp from 'sharp'
-import { fileURLToPath } from 'url'
+import { postgresAdapter } from "@payloadcms/db-postgres";
+import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import path from "path";
+import { buildConfig } from "payload";
+import sharp from "sharp";
+import { fileURLToPath } from "url";
 
 // Import collections
-import { Users } from './payload/collections/Users'
-import { Categories } from './payload/collections/Categories'
-import { Authors } from './payload/collections/Authors'
-import { Articles } from './payload/collections/Articles'
-import { Presentations } from './payload/collections/Presentations'
-import { Media } from './payload/collections/Media'
+import { Users } from "./payload/collections/Users";
+import { Categories } from "./payload/collections/Categories";
+import { Authors } from "./payload/collections/Authors";
+import { Articles } from "./payload/collections/Articles";
+import { Presentations } from "./payload/collections/Presentations";
+import { MediaBackUp } from "./payload/collections/MediaBackup";
 
 // Import globals
-import { Une } from './payload/globals/Une'
+import { Une } from "./payload/globals/Une";
 
-import { cloudinaryStorage } from 'payload-storage-cloudinary'
+import { cloudinaryStorage } from "payload-storage-cloudinary";
+import { s3Storage } from "@payloadcms/storage-s3";
+import { Media } from "@/payload/collections/Media";
 
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
-
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 export default buildConfig({
   admin: {
-    user: 'users',
+    user: "users",
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -36,18 +37,17 @@ export default buildConfig({
     Articles,
     Presentations,
     Media,
+    MediaBackUp,
   ],
-  globals: [
-    Une,
-  ],
+  globals: [Une],
   editor: lexicalEditor({}),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: process.env.PAYLOAD_SECRET || "",
   typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'),
+    outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URL || '',
+      connectionString: process.env.DATABASE_URL || "",
     },
     push: true, // Enabled to recreate media table with correct schema
     // logger: process.env.NODE_ENV === 'development',
@@ -61,8 +61,21 @@ export default buildConfig({
         api_secret: process.env.CLOUDINARY_API_SECRET,
       },
       collections: {
-        media: true, // Simple config - just works!
+        media_cloudinary_backup: true, // Simple config - just works!
+      },
+    }),
+    s3Storage({
+      collections: {
+        media: { prefix: "payload" },
+      },
+      bucket: process.env.S3_BUCKET!,
+      config: {
+        credentials: {
+          accessKeyId: process.env.S3_ACCESS_KEY ?? "",
+          secretAccessKey: process.env.S3_SECRET_KEY ?? "",
+        },
+        region: "eu-north-1",
       },
     }),
   ],
-})
+});

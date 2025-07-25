@@ -36,7 +36,7 @@ interface LexicalContent {
   };
 }
 
-const LexicalRenderer = ({
+export const ArticleLexicalRenderer = ({
   content,
   small,
 }: {
@@ -198,7 +198,7 @@ const LexicalRenderer = ({
         if (node.value?.url) {
           const imageWidth = node.value.width || 800;
           const imageHeight = node.value.height || 600;
-          
+
           return (
             <div key={index} className="my-6 flex flex-col items-center w-full">
               <div className="relative w-full max-h-[60vh] flex justify-center">
@@ -209,10 +209,10 @@ const LexicalRenderer = ({
                   height={imageHeight}
                   className="object-contain max-w-full max-h-[60vh] h-auto"
                   style={{
-                    width: 'auto',
-                    height: 'auto',
-                    maxWidth: '100%',
-                    maxHeight: '60vh'
+                    width: "auto",
+                    height: "auto",
+                    maxWidth: "100%",
+                    maxHeight: "60vh",
                   }}
                 />
               </div>
@@ -259,12 +259,10 @@ const LexicalRenderer = ({
   };
 
   return (
-    <div className={`lexical-renderer ${small ? "text-sm" : ""}`}>
+    <div className={`lexical-renderer ${small ? "text-sm" : "text-lg"}`}>
       {lexicalContent.root.children.map((node, index) =>
         renderNode(node, index)
       )}
     </div>
   );
 };
-
-export default LexicalRenderer;

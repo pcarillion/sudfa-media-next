@@ -22,14 +22,20 @@
     "migrate:categories": "tsx src/scripts/migrate-contentful-categories.ts",
     "migrate:categories:prod": "tsx src/scripts/migrate-contentful-categories.ts --prod",
     "migrate:articles": "tsx src/scripts/migrate-contentful-articles.ts",
-    "migrate:articles:prod": "tsx src/scripts/migrate-contentful-articles.ts --prod"
+    "migrate:articles:prod": "tsx src/scripts/migrate-contentful-articles.ts --prod",
+    "migrate:cloudinary-to-s3": "tsx src/scripts/migrate-cloudinary-to-s3.ts",
+    "validate:migration": "tsx src/scripts/migrate-cloudinary-to-s3.ts --validate",
+    "migrate:media-to-s3": "tsx src/scripts/migrate-media-to-s3.ts",
+    "validate:media-s3": "tsx src/scripts/migrate-media-to-s3.ts --validate"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.850.0",
     "@contentful/rich-text-html-renderer": "^16.5.2",
     "@payloadcms/db-postgres": "^3.48.0",
     "@payloadcms/next": "^3.48.0",
     "@payloadcms/plugin-cloud-storage": "^3.48.0",
     "@payloadcms/richtext-lexical": "^3.48.0",
+    "@payloadcms/storage-s3": "^3.48.0",
     "axios": "^1.7.2",
     "cloudinary": "^2.7.0",
     "contentful": "^10.11.7",

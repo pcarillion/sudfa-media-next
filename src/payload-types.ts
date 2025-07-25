@@ -73,6 +73,7 @@ export interface Config {
     articles: Article;
     presentations: Presentation;
     media: Media;
+    media_cloudinary_backup: MediaCloudinaryBackup;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -85,6 +86,7 @@ export interface Config {
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
     presentations: PresentationsSelect<false> | PresentationsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    media_cloudinary_backup: MediaCloudinaryBackupSelect<false> | MediaCloudinaryBackupSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -190,6 +192,8 @@ export interface Author {
   createdAt: string;
 }
 /**
+ * Collection de médias stockés sur AWS S3
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -201,28 +205,21 @@ export interface Media {
    * ID de l'asset Contentful d'origine (pour traçabilité)
    */
   contentfulId?: string | null;
-  cloudinaryPublicId?: string | null;
-  cloudinaryUrl?: string | null;
-  cloudinaryResourceType?: string | null;
-  cloudinaryFormat?: string | null;
-  cloudinaryVersion?: number | null;
   /**
-   * Direct URL to the original file without transformations
+   * Source de migration (cloudinary, local, etc.)
    */
-  originalUrl?: string | null;
+  migratedFrom?: string | null;
   /**
-   * URL with applied transformations
+   * Date de migration vers S3
    */
-  transformedUrl?: string | null;
+  migrationDate?: string | null;
+  prefix?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
   thumbnailURL?: string | null;
   filename?: string | null;
   mimeType?: string | null;
-  /**
-   * File size in bytes
-   */
   filesize?: number | null;
   width?: number | null;
   height?: number | null;
@@ -230,50 +227,18 @@ export interface Media {
   focalY?: number | null;
   sizes?: {
     thumbnail?: {
-      cloudinaryPublicId?: string | null;
-      cloudinaryUrl?: string | null;
-      cloudinaryResourceType?: string | null;
-      cloudinaryFormat?: string | null;
-      cloudinaryVersion?: number | null;
-      /**
-       * Direct URL to the original file without transformations
-       */
-      originalUrl?: string | null;
-      /**
-       * URL with applied transformations
-       */
-      transformedUrl?: string | null;
       url?: string | null;
       width?: number | null;
       height?: number | null;
       mimeType?: string | null;
-      /**
-       * File size in bytes
-       */
       filesize?: number | null;
       filename?: string | null;
     };
     card?: {
-      cloudinaryPublicId?: string | null;
-      cloudinaryUrl?: string | null;
-      cloudinaryResourceType?: string | null;
-      cloudinaryFormat?: string | null;
-      cloudinaryVersion?: number | null;
-      /**
-       * Direct URL to the original file without transformations
-       */
-      originalUrl?: string | null;
-      /**
-       * URL with applied transformations
-       */
-      transformedUrl?: string | null;
       url?: string | null;
       width?: number | null;
       height?: number | null;
       mimeType?: string | null;
-      /**
-       * File size in bytes
-       */
       filesize?: number | null;
       filename?: string | null;
     };
@@ -398,6 +363,96 @@ export interface Presentation {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_cloudinary_backup".
+ */
+export interface MediaCloudinaryBackup {
+  id: number;
+  alt: string;
+  legend?: string | null;
+  /**
+   * ID de l'asset Contentful d'origine (pour traçabilité)
+   */
+  contentfulId?: string | null;
+  cloudinaryPublicId?: string | null;
+  cloudinaryUrl?: string | null;
+  cloudinaryResourceType?: string | null;
+  cloudinaryFormat?: string | null;
+  cloudinaryVersion?: number | null;
+  /**
+   * Direct URL to the original file without transformations
+   */
+  originalUrl?: string | null;
+  /**
+   * URL with applied transformations
+   */
+  transformedUrl?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  /**
+   * File size in bytes
+   */
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      cloudinaryPublicId?: string | null;
+      cloudinaryUrl?: string | null;
+      cloudinaryResourceType?: string | null;
+      cloudinaryFormat?: string | null;
+      cloudinaryVersion?: number | null;
+      /**
+       * Direct URL to the original file without transformations
+       */
+      originalUrl?: string | null;
+      /**
+       * URL with applied transformations
+       */
+      transformedUrl?: string | null;
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      /**
+       * File size in bytes
+       */
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      cloudinaryPublicId?: string | null;
+      cloudinaryUrl?: string | null;
+      cloudinaryResourceType?: string | null;
+      cloudinaryFormat?: string | null;
+      cloudinaryVersion?: number | null;
+      /**
+       * Direct URL to the original file without transformations
+       */
+      originalUrl?: string | null;
+      /**
+       * URL with applied transformations
+       */
+      transformedUrl?: string | null;
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      /**
+       * File size in bytes
+       */
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -426,6 +481,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: number | Media;
+      } | null)
+    | ({
+        relationTo: 'media_cloudinary_backup';
+        value: number | MediaCloudinaryBackup;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -554,6 +613,53 @@ export interface PresentationsSelect<T extends boolean = true> {
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
+  alt?: T;
+  legend?: T;
+  contentfulId?: T;
+  migratedFrom?: T;
+  migrationDate?: T;
+  prefix?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  url?: T;
+  thumbnailURL?: T;
+  filename?: T;
+  mimeType?: T;
+  filesize?: T;
+  width?: T;
+  height?: T;
+  focalX?: T;
+  focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media_cloudinary_backup_select".
+ */
+export interface MediaCloudinaryBackupSelect<T extends boolean = true> {
   alt?: T;
   legend?: T;
   contentfulId?: T;

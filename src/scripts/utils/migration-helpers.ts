@@ -27,6 +27,7 @@ export interface MigrationOptions {
   enablePush?: boolean;
   batchSize?: number;
   delay?: number;
+  useS3?: boolean; // Nouvelle option pour utiliser S3 au lieu de Cloudinary
 }
 
 /**
@@ -37,14 +38,18 @@ export interface MigrationOptions {
 export async function initializePayloadForMigration(
   options: MigrationOptions = {}
 ) {
-  const { isProduction = false, enablePush = false } = options;
+  const { isProduction = false, enablePush = false, useS3 = false } = options;
   const envLabel = isProduction ? "PRODUCTION" : "LOCAL";
 
   console.log(`🚀 Initialisation de Payload pour la migration (${envLabel})`);
 
   // Valider les variables d'environnement
-  validateEnvironmentVariables(isProduction);
-  validateContentfulEnvironment();
+  validateEnvironmentVariables(isProduction, useS3);
+  
+  // Valider Contentful seulement si on n'utilise pas S3
+  if (!useS3) {
+    validateContentfulEnvironment();
+  }
 
   // Créer la configuration Payload
   const payloadConfig = await createPayloadConfig(isProduction, enablePush);
