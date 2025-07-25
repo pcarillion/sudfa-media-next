@@ -6,7 +6,7 @@ import { H1 } from "@/components/common/ui/H1";
 import { SearchInput } from "@/components/search/SearchInput";
 import { ArticlesList } from "@/components/articles/ArticlesList";
 import { Article } from "@/payload-types";
-import { Loader2, AlertCircle, FileX } from "lucide-react";
+import { Loader2, AlertCircle, FileX, File } from "lucide-react";
 
 interface SearchState {
   articles: Article[];
@@ -158,7 +158,7 @@ export default function SearchPageClient() {
           {!hasSearched && !loading && (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <div className="bg-gray-100 rounded-full p-4 mb-4">
-                <FileX className="h-8 w-8 text-gray-400" />
+                <File className="h-8 w-8 text-gray-400" />
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
                 Commencez votre recherche

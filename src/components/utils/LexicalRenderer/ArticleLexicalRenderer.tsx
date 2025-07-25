@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { BlockRenderer } from "@/components/blocks/BlockRenderer";
 
 interface LexicalNode {
   type: string;
@@ -23,10 +24,17 @@ interface LexicalNode {
   };
   fields?: {
     url?: string;
+    // Video block fields
+    videoType?: "youtube" | "vimeo";
+    youtubeID?: string;
+    vimeoID?: string;
+    title?: string;
+    blockType?: string;
   };
   direction?: string;
   indent?: number;
   textAlign?: "left" | "center" | "right" | "justify";
+  blockName?: string;
 }
 
 interface LexicalContent {
@@ -277,6 +285,20 @@ export const ArticleLexicalRenderer = ({
             </code>
           </pre>
         );
+
+      case "block":
+        // Gestion des blocks personnalisés
+        console.log(node);
+        if (node.type === "block" && node.fields) {
+          return (
+            <BlockRenderer
+              key={index}
+              blockType={node.fields.blockType!}
+              blockData={node.fields}
+            />
+          );
+        }
+        return null;
 
       default:
         // Type non géré, essayer de traiter les enfants
