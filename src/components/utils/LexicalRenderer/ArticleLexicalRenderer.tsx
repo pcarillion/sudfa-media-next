@@ -8,7 +8,7 @@ interface LexicalNode {
   type: string;
   children?: LexicalNode[];
   text?: string;
-  format?: number;
+  format?: number | string;
   url?: string;
   tag?: string;
   listType?: "bullet" | "number";
@@ -21,8 +21,12 @@ interface LexicalNode {
     legent?: string;
     legend?: string;
   };
+  fields?: {
+    url?: string;
+  };
   direction?: string;
   indent?: number;
+  textAlign?: "left" | "center" | "right" | "justify";
 }
 
 interface LexicalContent {
@@ -65,18 +69,45 @@ export const ArticleLexicalRenderer = ({
     return null;
   }
 
+  const getTextAlignClass = (node: LexicalNode): string => {
+    // Vérifier si l'alignement est défini dans textAlign
+    if (node.textAlign) {
+      switch (node.textAlign) {
+        case "center":
+          return "text-center";
+        case "right":
+          return "text-right";
+        case "justify":
+          return "text-justify";
+        case "left":
+        default:
+          return "text-left";
+      }
+    }
+
+    // Vérifier si l'alignement est défini dans format (pour compatibilité)
+    if (typeof node.format === "string") {
+      if (node.format.includes("center")) return "text-center";
+      if (node.format.includes("right")) return "text-right";
+      if (node.format.includes("justify")) return "text-justify";
+    }
+
+    return "text-left"; // alignement par défaut
+  };
+
   const renderNode = (node: LexicalNode, index: number): React.ReactNode => {
     switch (node.type) {
       case "paragraph":
+        const alignClass = getTextAlignClass(node);
         if (!node.children || node.children.length === 0) {
           return (
-            <p key={index} className="mb-4">
+            <p key={index} className={`mb-4 ${alignClass}`}>
               &nbsp;
             </p>
           );
         }
         return (
-          <p key={index} className="mb-4">
+          <p key={index} className={`mb-4 ${alignClass}`}>
             {node.children.map((child, childIndex) =>
               renderNode(child, childIndex)
             )}
@@ -99,13 +130,11 @@ export const ArticleLexicalRenderer = ({
           h5: "text-lg font-bold mb-2",
           h6: "text-base font-bold mb-2",
         };
+        const headingAlignClass = getTextAlignClass(node);
         return (
           <HeadingTag
             key={index}
-            className={
-              headingClasses[node.tag as keyof typeof headingClasses] ||
-              headingClasses.h2
-            }
+            className={`${headingClasses[node.tag as keyof typeof headingClasses] || headingClasses.h2} ${headingAlignClass}`}
           >
             {node.children?.map((child, childIndex) =>
               renderNode(child, childIndex)
@@ -115,12 +144,16 @@ export const ArticleLexicalRenderer = ({
 
       case "list":
         const ListTag = node.listType === "number" ? "ol" : "ul";
-        const listClasses =
+        const baseListClasses =
           node.listType === "number"
             ? "list-decimal list-inside mb-4 ml-4"
             : "list-disc list-inside mb-4 ml-4";
+        const listAlignClass = getTextAlignClass(node);
         return (
-          <ListTag key={index} className={listClasses}>
+          <ListTag
+            key={index}
+            className={`${baseListClasses} ${listAlignClass}`}
+          >
             {node.children?.map((child, childIndex) =>
               renderNode(child, childIndex)
             )}
@@ -137,10 +170,11 @@ export const ArticleLexicalRenderer = ({
         );
 
       case "quote":
+        const quoteAlignClass = getTextAlignClass(node);
         return (
           <blockquote
             key={index}
-            className="border-l-4 border-gray-300 pl-4 italic mb-4 text-gray-600"
+            className={`border-l-4 border-gray-300 pl-4 italic mb-4 text-gray-600 ${quoteAlignClass}`}
           >
             {node.children?.map((child, childIndex) =>
               renderNode(child, childIndex)
@@ -152,7 +186,7 @@ export const ArticleLexicalRenderer = ({
         let text = node.text || "";
 
         // Appliquer les formats (format est un bitmask)
-        if (node.format) {
+        if (typeof node.format === "number" && node.format) {
           if (node.format & 1) {
             // Bold
             text = `<strong>${text}</strong>`;
@@ -178,12 +212,13 @@ export const ArticleLexicalRenderer = ({
         return <span key={index} dangerouslySetInnerHTML={{ __html: text }} />;
 
       case "link":
-        const url = node.url || "#";
+        const url = node?.fields?.url || "#";
+        console.log(node);
         return (
           <Link
             key={index}
             href={url}
-            className="text-blue-600 hover:text-blue-800 underline"
+            className="hover:opacity-70 underline"
             target={url.startsWith("http") ? "_blank" : undefined}
             rel={url.startsWith("http") ? "noopener noreferrer" : undefined}
           >
@@ -259,7 +294,9 @@ export const ArticleLexicalRenderer = ({
   };
 
   return (
-    <div className={`lexical-renderer ${small ? "text-sm" : "text-lg"}`}>
+    <div
+      className={`lexical-renderer leading-[1.7] ${small ? "text-sm" : "text-lg"}`}
+    >
       {lexicalContent.root.children.map((node, index) =>
         renderNode(node, index)
       )}

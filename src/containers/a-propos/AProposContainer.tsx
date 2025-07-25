@@ -1,17 +1,16 @@
 import { Container } from "@/components/common/Container";
 import { H1 } from "@/components/common/ui/H1";
-import LexicalRenderer from "@/components/utils/LexicalRenderer/LexicalRenderer";
+import { ArticleLexicalRenderer } from "@/components/utils/LexicalRenderer/ArticleLexicalRenderer";
 import { Api } from "@/lib/api";
 import React from "react";
 
 export const AProposContainer = async () => {
   const api = await Api();
-  const presentation = await api.getPresentation();
+  const presentation = await api.getAPropos();
   return (
     <Container>
-      {/* <H1 center>{presentation?.titre}</H1> */}
-      <div className="px-3">
-        {/* <LexicalRenderer small content={presentation?.longVersion_html} /> */}
+      <div className="px-3 md:px-24 w-full">
+        <ArticleLexicalRenderer content={presentation?.content} />
       </div>
     </Container>
   );

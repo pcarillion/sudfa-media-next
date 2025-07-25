@@ -9,9 +9,9 @@ export default async function AuteursContainer() {
   const authors = await api.getAuthors();
   return (
     <Container>
-      <H1 center>Les Auteur-e-s</H1>
+      <H1 center>Equipe et collaborateurs</H1>
       <ul className="py-">
-        {authors.map((author) => {
+        {authors.map(author => {
           return <AuthorCard key={author.id} author={author} />;
         })}
       </ul>

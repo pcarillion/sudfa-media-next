@@ -1,11 +1,5 @@
 import { getPayload, PaginatedDocs } from "payload";
-import type {
-  Article,
-  Author,
-  Category,
-  // Media,
-  Presentation,
-} from "@/payload-types";
+import type { Article, Author, Category } from "@/payload-types";
 import configPromise from "../../../payload.config";
 import { APIHandler } from "@/lib/service/payload/api.types";
 
@@ -16,6 +10,7 @@ export const PayloadAPIActions = async (): Promise<APIHandler> => {
     // Articles
     async getHomeArticles(): Promise<Article[]> {
       // Récupérer les articles à la une depuis le global "Une"
+      const articles: Article[] = [];
       const une = await payload.findGlobal({
         slug: "une",
         depth: 2,
@@ -23,18 +18,22 @@ export const PayloadAPIActions = async (): Promise<APIHandler> => {
 
       // Si le global Une existe et contient des articles, les retourner
       if (une && une.articles && Array.isArray(une.articles)) {
-        return une.articles as Article[];
+        articles.push(...(une.articles as Article[]));
       }
 
-      // Fallback: récupérer les 6 derniers articles si aucun article à la une n'est configuré
+      const limit = 14 - articles.length;
       const { docs } = await payload.find({
         collection: "articles",
         sort: "-date",
-        limit: 6,
+        where: {
+          id: { not_in: articles.map(article => article.id) },
+        },
+        limit,
         depth: 2,
       });
+      articles.push(...docs);
 
-      return docs;
+      return articles;
     },
 
     async getArticleBySlug(slug: string): Promise<Article | null> {
@@ -205,22 +204,20 @@ export const PayloadAPIActions = async (): Promise<APIHandler> => {
       }
     },
 
-    // Presentations
-    async getPresentation(): Promise<Presentation[]> {
-      const { docs } = await payload.find({
-        collection: "presentations",
-        limit: 1,
-      });
-
-      return docs;
-    },
-
     async getLinksGlobal() {
       const links = await payload.findGlobal({
         slug: "links",
       });
 
       return links;
+    },
+
+    async getAPropos() {
+      const apropos = await payload.findGlobal({
+        slug: "apropos",
+      });
+
+      return apropos;
     },
   };
 };

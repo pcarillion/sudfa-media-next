@@ -10,7 +10,6 @@ import { Users } from "./payload/collections/Users";
 import { Categories } from "./payload/collections/Categories";
 import { Authors } from "./payload/collections/Authors";
 import { Articles } from "./payload/collections/Articles";
-import { Presentations } from "./payload/collections/Presentations";
 import { MediaBackUp } from "./payload/collections/MediaBackup";
 
 // Import globals
@@ -20,6 +19,7 @@ import { cloudinaryStorage } from "payload-storage-cloudinary";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { Media } from "@/payload/collections/Media";
 import { Links } from "@/payload/globals/Links";
+import { APropos } from "@/payload/globals/APropos";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -31,16 +31,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [
-    Users,
-    Categories,
-    Authors,
-    Articles,
-    Presentations,
-    Media,
-    MediaBackUp,
-  ],
-  globals: [Une, Links],
+  collections: [Users, Categories, Authors, Articles, Media, MediaBackUp],
+  globals: [Une, Links, APropos],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

@@ -38,7 +38,7 @@ export const ArticleContainer = async ({ slug }: { slug: string }) => {
           <H1>{article.titre}</H1>
           <Typography center classAdd="my-2.5">
             {formatDate(article.date)} - par {auteur?.name || "Anonyme"} -{" "}
-            {auteur?.name || "Non catégorisé"}
+            {(article.category as Category)?.name || "Non catégorisé"}
           </Typography>
           <LexicalRenderer content={article.presentation} />
           {article.photoPrincipale && (

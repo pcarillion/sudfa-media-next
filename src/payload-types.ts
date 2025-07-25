@@ -71,7 +71,6 @@ export interface Config {
     categories: Category;
     authors: Author;
     articles: Article;
-    presentations: Presentation;
     media: Media;
     media_cloudinary_backup: MediaCloudinaryBackup;
     'payload-locked-documents': PayloadLockedDocument;
@@ -84,7 +83,6 @@ export interface Config {
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
     articles: ArticlesSelect<false> | ArticlesSelect<true>;
-    presentations: PresentationsSelect<false> | PresentationsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     media_cloudinary_backup: MediaCloudinaryBackupSelect<false> | MediaCloudinaryBackupSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -97,10 +95,12 @@ export interface Config {
   globals: {
     une: Une;
     links: Link;
+    apropos: Apropo;
   };
   globalsSelect: {
     une: UneSelect<false> | UneSelect<true>;
     links: LinksSelect<false> | LinksSelect<true>;
+    apropos: AproposSelect<false> | AproposSelect<true>;
   };
   locale: null;
   user: User & {
@@ -310,61 +310,6 @@ export interface Article {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "presentations".
- */
-export interface Presentation {
-  id: number;
-  title: string;
-  /**
-   * Version courte de la présentation
-   */
-  shortVersion?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * Version détaillée de la présentation
-   */
-  longVersion?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  logo?: (number | null) | Media;
-  /**
-   * Version HTML de la version courte (généré automatiquement)
-   */
-  shortVersion_html?: string | null;
-  /**
-   * Version HTML de la version longue (généré automatiquement)
-   */
-  longVersion_html?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_cloudinary_backup".
  */
 export interface MediaCloudinaryBackup {
@@ -475,10 +420,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'articles';
         value: number | Article;
-      } | null)
-    | ({
-        relationTo: 'presentations';
-        value: number | Presentation;
       } | null)
     | ({
         relationTo: 'media';
@@ -593,20 +534,6 @@ export interface ArticlesSelect<T extends boolean = true> {
   article?: T;
   content_html?: T;
   contentfulId?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "presentations_select".
- */
-export interface PresentationsSelect<T extends boolean = true> {
-  title?: T;
-  shortVersion?: T;
-  longVersion?: T;
-  logo?: T;
-  shortVersion_html?: T;
-  longVersion_html?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -786,6 +713,30 @@ export interface Link {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "apropos".
+ */
+export interface Apropo {
+  id: number;
+  content?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "une_select".
  */
 export interface UneSelect<T extends boolean = true> {
@@ -803,6 +754,16 @@ export interface LinksSelect<T extends boolean = true> {
   facebookUrl?: T;
   mediapartUrl?: T;
   cagnotteUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "apropos_select".
+ */
+export interface AproposSelect<T extends boolean = true> {
+  content?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
