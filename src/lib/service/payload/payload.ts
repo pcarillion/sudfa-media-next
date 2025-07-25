@@ -80,7 +80,6 @@ export const PayloadAPIActions = async (): Promise<APIHandler> => {
           slug: "une",
           depth: 0,
         });
-        console.log(une);
 
         if (une && une.articles && Array.isArray(une.articles)) {
           listOfUneIds = [
@@ -221,7 +220,10 @@ export const PayloadAPIActions = async (): Promise<APIHandler> => {
     },
 
     // Search
-    async searchArticles(query: string, limit: number = 10): Promise<Article[]> {
+    async searchArticles(
+      query: string,
+      limit: number = 10
+    ): Promise<Article[]> {
       if (!query || query.trim().length === 0) {
         return [];
       }

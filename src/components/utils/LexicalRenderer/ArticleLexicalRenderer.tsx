@@ -221,7 +221,6 @@ export const ArticleLexicalRenderer = ({
 
       case "link":
         const url = node?.fields?.url || "#";
-        console.log(node);
         return (
           <Link
             key={index}
@@ -288,7 +287,6 @@ export const ArticleLexicalRenderer = ({
 
       case "block":
         // Gestion des blocks personnalisés
-        console.log(node);
         if (node.type === "block" && node.fields) {
           return (
             <BlockRenderer

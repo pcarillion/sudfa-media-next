@@ -6,12 +6,15 @@ import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
 import { NavItem } from "./NavBar.types";
 import { usePathname } from "next/navigation";
 import { Search } from "lucide-react";
+import { FaHandsHelping } from "react-icons/fa";
+import { Link as LinkType } from "@/payload-types";
 
 interface NavBarProps {
   navItems: NavItem[];
+  links: LinkType;
 }
 
-export const Navbar = ({ navItems }: NavBarProps) => {
+export const Navbar = ({ navItems, links }: NavBarProps) => {
   // State to manage the navbar's visibility
   const [nav, setNav] = useState(false);
 
@@ -31,7 +34,7 @@ export const Navbar = ({ navItems }: NavBarProps) => {
             pathName === "/" ? "font-bold" : ""
           }  hover:no-underline hover:opacity-70`}
         >
-          <li className="px-4 m-2 hover:no-underline">Accueil</li>
+          <li className="px-3 m-2 hover:no-underline">Accueil</li>
         </Link>
         {navItems.map(({ label, id }) => (
           <Link
@@ -90,24 +93,41 @@ export const Navbar = ({ navItems }: NavBarProps) => {
         >
           <AiOutlineClose size={20} />
         </div>
-        <ul>
-          <Link href={`/accueil`}>
-            <li className="p-4">Accueil</li>
+        <ul className="h-full flex flex-col">
+          <Link href={`/`}>
+            <li className="p-3">Accueil</li>
           </Link>
           {/* Mobile Navigation Items */}
           {navItems.map(({ label, id }) => (
             <Link href={`/category/${id}`} key={id}>
-              <li key={id} className="p-4">
+              <li key={id} className="p-3">
                 {label}
               </li>
             </Link>
           ))}
           <Link href={`/auteurs`}>
-            <li className="p-4">Les Auteurs</li>
+            <li className="p-3">Les Auteurs</li>
           </Link>
           <Link href={`/a-propos`}>
-            <li className="p-4">A propos</li>
+            <li className="p-3">A propos</li>
           </Link>
+          <li className="border-t p-3 flex flex-row gap-4 items-center justify-between">
+            <Link
+              href="/recherche"
+              className={`${pathName === "/recherche" ? "font-bold" : ""} hover:no-underline hover:opacity-70`}
+            >
+              <div className="hover:no-underline h-full">
+                <Search className="h-5 w-5" />
+              </div>
+            </Link>
+            <Link
+              className="bg-[#D2270F] flex flex-row items-center gap-2 text-white px-3 py-1 mt-1 border border-[#D2270F] hover:bg-white hover:text-[#D2270F] hover:no-underline ease-in-out"
+              href={links.cagnotteUrl || ""}
+            >
+              <FaHandsHelping className="h-4 w-4" />
+              Pour nous soutenir
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>

@@ -37,7 +37,6 @@ export const HomeContainer = async () => {
               {/* left articles: 5 -- span 5 */}
               {articles.map((article, i) => {
                 if (i < 1 || i > 6 || articles.length < i - 1) return null;
-                console.log(article.id);
                 return <ArticleCard key={article.id} article={article} />;
               })}
             </div>

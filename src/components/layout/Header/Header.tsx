@@ -51,9 +51,9 @@ export const Header = async () => {
           </div>
         </div>
       </Container>
-      <div className="md:sticky md:top-0 md:z-50 md:bg-white md:shadow-sm">
+      <div className="sticky top-0 z-50 bg-white md:shadow-sm">
         <Container>
-          <Navbar navItems={navItems} />
+          <Navbar navItems={navItems} links={links} />
         </Container>
       </div>
     </>

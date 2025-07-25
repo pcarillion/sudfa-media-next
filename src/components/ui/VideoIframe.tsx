@@ -15,7 +15,6 @@ export const VideoIframe: React.FC<VideoIframeProps> = ({
   className = "w-full h-full",
   loading = "lazy",
 }) => {
-  console.log(src);
   return (
     <iframe
       src={src}
