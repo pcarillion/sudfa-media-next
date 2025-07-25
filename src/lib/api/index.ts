@@ -1,10 +1,8 @@
 "use server";
 
-import { ContentfulAPIActions } from "../service/contentful/contentful";
+import { PayloadAPIActions } from "../service/payload/payload";
+// import { ContentfulAPIActions } from "../service/contentful/contentful";
 
-export const Api = ContentfulAPIActions;
-
-/**
- * To do
- */
-// export const Api = process.env.ENABLE_CONTENTFUL === "true" ? ContentfulAPIActions : ApiActions;
+// Migration vers Payload - utilise Payload par défaut, fallback sur Contentful si nécessaire
+// export const Api = process.env.ENABLE_CONTENTFUL === "true" ? ContentfulAPIActions : PayloadAPIActions;
+export const Api = PayloadAPIActions;

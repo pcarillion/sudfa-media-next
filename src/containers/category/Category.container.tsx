@@ -10,15 +10,26 @@ const LIMIT = 5;
 export const CategoryContainer = async ({ id }: { id: string }) => {
   const api = await Api();
   const category = await api.getCategoryById(id);
+
+  if (!category) {
+    return <Container>Catégorie non trouvée</Container>;
+  }
+
   const getArticles = async (offset: number) => {
     "use server";
-    return await api.getPaginatedArticlesByCateogry(
-      category.name,
-      LIMIT,
-      offset
+    const api = await Api();
+    const result = await api.getPaginatedArticlesByCateogry(
+      id,
+      Math.floor(offset / LIMIT) + 1,
+      LIMIT
     );
+    return {
+      articles: result.docs,
+      nbResults: result.totalDocs,
+    };
   };
-  const { articles } = await getArticles(0);
+  const firstPage = await api.getPaginatedArticlesByCateogry(id, 1, LIMIT);
+  const articles = firstPage.docs;
   return (
     <Container>
       <H1 center>{category.name}</H1>

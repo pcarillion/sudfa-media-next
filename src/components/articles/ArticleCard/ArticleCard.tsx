@@ -1,7 +1,8 @@
 import { AspectRatioImage } from "@/components/common/AspectRatioImage";
 import { H4 } from "@/components/common/ui/H4";
 import { Typography } from "@/components/common/ui/Typography";
-import { Article } from "@/types/api.types";
+import LexicalRenderer from "@/components/utils/LexicalRenderer/LexicalRenderer";
+import { Article, Author, Media } from "@/payload-types";
 import { formatDate } from "@/utils/Formatting";
 import Link from "next/link";
 import React from "react";
@@ -21,6 +22,7 @@ export const ArticleCard = ({
   border = "none",
 }: ArticleCardType) => {
   if (!article) return null;
+  const thumbnail = article.photoPrincipale as Media;
   return (
     <div
       className={`w-full p-3 ${
@@ -28,19 +30,21 @@ export const ArticleCard = ({
       }
       `}
     >
-      <AspectRatioImage
-        className={`block pb-3 ${hasPicture ? "" : "md:hidden"}`}
-        src={article.photoPrincipale.url}
-        alt={article.photoPrincipale.alt}
-      />
+      {thumbnail && (
+        <AspectRatioImage
+          className={`block pb-3 ${hasPicture ? "" : "md:hidden"}`}
+          src={thumbnail.url!}
+          alt={thumbnail.alt}
+        />
+      )}
       <div>
         <Link href={`/article/${article.slug}`}>
           <H4>{article.titre}</H4>
         </Link>
         <Typography classAdd="py-2" small>
           {formatDate(article.date)} - par{" "}
-          <Link href={`/auteur/${article.authors[0].id}`}>
-            {article.authors[0].name}
+          <Link href={`/auteur/${(article.authors as Author[])[0].id}`}>
+            {(article.authors as Author[])[0].name}
           </Link>
         </Typography>
 
@@ -48,7 +52,7 @@ export const ArticleCard = ({
           classAdd={`py-2 ${hasDescription ? "" : "md:hidden"}`}
           small
         >
-          {article.presentation}
+          <LexicalRenderer content={article.presentation} />
         </Typography>
       </div>
     </div>

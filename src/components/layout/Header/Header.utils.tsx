@@ -1,8 +1,8 @@
-import { Categories } from "@/types/api.types";
+import { Category } from "@/payload-types";
 import { NavItem } from "./Navbar/NavBar.types";
 
 export const mapCategoriesToNavItems = (
-  rawCategories: Categories
+  rawCategories: Category[]
 ): NavItem[] => {
   return Object.values(rawCategories).map(({ name, id, order }) => {
     return {

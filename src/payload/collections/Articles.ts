@@ -49,7 +49,7 @@ export const Articles: CollectionConfig = {
       name: 'photoPrincipale',
       type: 'upload',
       relationTo: 'media',
-      required: true,
+      required: false,
       label: 'Photo principale',
     },
     {
@@ -76,6 +76,16 @@ export const Articles: CollectionConfig = {
         description: 'Version HTML du contenu (généré automatiquement)',
         readOnly: true,
       },
+    },
+    {
+      name: 'contentfulId',
+      type: 'text',
+      label: 'ID Contentful',
+      admin: {
+        description: 'ID de l\'article Contentful d\'origine (pour traçabilité)',
+        readOnly: true,
+      },
+      index: true,
     },
   ],
   hooks: {

@@ -1,78 +1,41 @@
-export type ApiRes = {
-  data: {
-    docs: any[];
-  };
-};
+import {
+  Article,
+  Author,
+  Category,
+  // Media,
+  Presentation,
+} from "@/payload-types";
+import { PaginatedDocs } from "payload";
 
-export type Category = {
-  id: string;
-  name: string;
-  order: number;
-  description?: string;
-  updatedAt?: string;
-  createdAt?: string;
-};
+// Interface pour l'API Handler
+export interface APIHandler {
+  // Articles
+  getHomeArticles(): Promise<Article[]>;
+  getArticleBySlug(slug: string): Promise<Article | null>;
+  getArticlesByCategory(
+    categoryName: string,
+    limit?: number,
+    notInUne?: boolean
+  ): Promise<Article[]>;
+  getPaginatedArticlesByCateogry(
+    categoryId: string,
+    page?: number,
+    limit?: number
+  ): Promise<PaginatedDocs<Article>>;
+  getPaginatedArticlesByAuthor(
+    authorId: string,
+    page?: number,
+    limit?: number
+  ): Promise<PaginatedDocs<Article>>;
 
-export type Categories = Category[];
+  // Authors
+  getAuthors(): Promise<Author[]>;
+  getAuthorById(id: string): Promise<Author | null>;
 
-export type PayloadImageData = {
-  id: string;
-  alt: string;
-  legend: string;
-  updatedAt?: string;
-  createdAt?: string;
-  url: string;
-  thumbnailURL?: string;
-  filename?: string;
-  width?: number;
-  height?: number;
-};
+  // Categories
+  getCategories(): Promise<Category[]>;
+  getCategoryById(id: string): Promise<Category | null>;
 
-export type Author = {
-  id: string;
-  name: string;
-  description: string;
-  photo: PayloadImageData;
-  updatedAt?: string;
-  createdAt?: string;
-  slug: string;
-};
-
-export type Authors = Author[];
-
-export type Article = {
-  id: string;
-  titre: string;
-  slug: string;
-  date: string;
-  category: Category;
-  authors: Authors;
-  presentation: any;
-  photoPrincipale: PayloadImageData;
-  article?: any;
-  updatedAt?: string;
-  createdAt?: string;
-  content_html: string;
-};
-
-export type Articles = Article[];
-
-export type Presentation = {
-  id: string;
-  title: string;
-  shortVersion?: object;
-  longVersion?: object;
-  logo?: PayloadImageData;
-  updatedAt?: string;
-  createdAt?: string;
-  shortVersion_html: string;
-  longVersion_html: string;
-};
-
-export type Presentations = Presentation[];
-
-export type ApiPossibleResponseData =
-  | Categories
-  | Articles
-  | Authors
-  | Presentations;
+  // Presentations
+  getPresentation(): Promise<Presentation[]>;
+}

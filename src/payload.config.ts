@@ -12,6 +12,10 @@ import { Authors } from './payload/collections/Authors'
 import { Articles } from './payload/collections/Articles'
 import { Presentations } from './payload/collections/Presentations'
 import { Media } from './payload/collections/Media'
+
+// Import globals
+import { Une } from './payload/globals/Une'
+
 import { cloudinaryStorage } from 'payload-storage-cloudinary'
 
 const filename = fileURLToPath(import.meta.url)
@@ -33,6 +37,9 @@ export default buildConfig({
     Presentations,
     Media,
   ],
+  globals: [
+    Une,
+  ],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -42,7 +49,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
-    push: false, // Enabled to recreate media table with correct schema
+    push: true, // Enabled to recreate media table with correct schema
     // logger: process.env.NODE_ENV === 'development',
   }),
   sharp,
@@ -57,6 +64,5 @@ export default buildConfig({
         media: true, // Simple config - just works!
       },
     }),
-  // ],
   ],
 })

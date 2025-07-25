@@ -8,17 +8,16 @@ import React from "react";
 
 export const HomeContainer = async () => {
   const api = await Api();
-  const presentation = await api.getPresentation();
-  let articles = await api.getHomeArticles(20);
-  let politicArticles = await api.getArticlesByCategory("Politique", 3);
-  let cultureArticles = await api.getArticlesByCategory("Culture", 2);
+  let articles = await api.getHomeArticles();
+  let politicArticles = await api.getArticlesByCategory("Politique", 3, true);
+  let cultureArticles = await api.getArticlesByCategory("Culture", 2, true);
 
   return (
     <Container>
       <section className="md:grid md:grid-cols-12">
         <div className="md:col-span-8">
           {/* main section three last articles + culture -- span 14 */}
-          <H3 classAdd="p-3">Nouveautés</H3>
+          <H3 classAdd="p-3">A la Une</H3>
           <div className="md:grid md:grid-cols-8 h-full">
             {/* three last articles */}
             <div className="md:col-span-3 h-full">
@@ -34,7 +33,8 @@ export const HomeContainer = async () => {
               )}
               {/* left articles: 4 -- span 5 */}
               {articles.map((article, i) => {
-                if (i < 2 || i > 5 || articles.length < i - 1) return null;
+                if (i < 1 || i > 6 || articles.length < i - 1) return null;
+                console.log(article.id);
                 return <ArticleCard key={article.id} article={article} />;
               })}
             </div>
@@ -66,7 +66,7 @@ export const HomeContainer = async () => {
             <div className="md:col-span-8 md:border-t">
               <H3 classAdd="p-3">Culture</H3>
               <div className="md:grid md:grid-cols-8 h-full">
-                {cultureArticles.map((article) => {
+                {cultureArticles.map(article => {
                   return (
                     <div className="md:col-span-4" key={article.id}>
                       <ArticleCard
@@ -81,21 +81,21 @@ export const HomeContainer = async () => {
             </div>
           </>
         )}
-        {presentation && (
-          <div className="md:col-span-4 md:border-l">
-            <H3 classAdd="p-3">{presentation.title}</H3>
-            <div className="px-3">
-              <LexicalRenderer small content={presentation.shortVersion_html} />
-            </div>
+        {/* {presentation && ( */}
+        <div className="md:col-span-4 md:border-l">
+          {/* <H3 classAdd="p-3">{presentation.titre}</H3> */}
+          <div className="px-3">
+            {/* <LexicalRenderer small content={presentation.shortVersion_html} /> */}
           </div>
-        )}
+        </div>
+        {/* )} */}
       </section>
-      {articles.length > 5 && (
+      {/* {articles.length > 5 && (
         <section className="p-3 mt-12">
           <H3 center>Articles</H3>
           <ArticlesList articles={articles.slice(5)} />
         </section>
-      )}
+      )} */}
     </Container>
   );
 };

@@ -9,9 +9,9 @@ export const AProposContainer = async () => {
   const presentation = await api.getPresentation();
   return (
     <Container>
-      <H1 center>{presentation.title}</H1>
+      {/* <H1 center>{presentation?.titre}</H1> */}
       <div className="px-3">
-        <LexicalRenderer small content={presentation.longVersion_html} />
+        {/* <LexicalRenderer small content={presentation?.longVersion_html} /> */}
       </div>
     </Container>
   );

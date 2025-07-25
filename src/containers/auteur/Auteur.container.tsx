@@ -2,6 +2,7 @@ import { PaginatedArticlesList } from "@/components/articles/PaginatedArticlesLi
 import { AuthorCard } from "@/components/authors/AuthorCard";
 import { Container } from "@/components/common/Container";
 import { Api } from "@/lib/api";
+import { Article } from "@/payload-types";
 import React from "react";
 
 const LIMIT = 5;
@@ -10,11 +11,30 @@ export const AuteurContainer = async ({ id }: { id: string }) => {
   const api = await Api();
   const author = await api.getAuthorById(id);
 
-  const getArticles = async (offset: number) => {
+  if (!author) {
+    return <Container>Auteur non trouvé</Container>;
+  }
+
+  const getArticles = async (
+    offset: number
+  ): Promise<{
+    articles: Article[];
+    nbResults: number;
+  }> => {
     "use server";
-    return await api.getPaginatedArticlesByAuthor(author, LIMIT, offset);
+    const api = await Api();
+    const result = await api.getPaginatedArticlesByAuthor(
+      id,
+      Math.floor(offset / LIMIT) + 1,
+      LIMIT
+    );
+    return {
+      articles: result.docs,
+      nbResults: result.totalDocs,
+    };
   };
-  const { articles } = await getArticles(0);
+  const firstPage = await api.getPaginatedArticlesByAuthor(id, 1, LIMIT);
+  const articles = firstPage.docs;
 
   return (
     <Container>

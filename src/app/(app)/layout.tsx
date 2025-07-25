@@ -7,7 +7,7 @@ const playfair = Playfair_Display({ subsets: ["latin"] });
 
 export async function generateMetadata(): Promise<Metadata> {
   const api = await Api();
-  const pres = await api.getPresentation();
+  // const pres = await api.getPresentation();
 
   const baseUrl = process.env.BASE_URL || "https://sudfa-media.com";
   return {
@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: {
       canonical: "/",
     },
-    description: pres.shortVersion_html,
+    // description: pres?.shortVersion_html || 'Sudfa Media',
     icons: {
       icon: "/favicon.ico",
     },
