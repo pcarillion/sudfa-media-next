@@ -6,13 +6,8 @@ import type {
   // Media,
   Presentation,
 } from "@/payload-types";
-import {} from // formatPayloadArticle,
-// formatPayloadAuthor,
-// formatPayloadCategory,
-// formatPayloadMedia,
-"./payload.utils";
 import configPromise from "../../../payload.config";
-import { APIHandler } from "@/types/api.types";
+import { APIHandler } from "@/lib/service/payload/api.types";
 
 export const PayloadAPIActions = async (): Promise<APIHandler> => {
   const payload = await getPayload({ config: configPromise });
@@ -218,6 +213,14 @@ export const PayloadAPIActions = async (): Promise<APIHandler> => {
       });
 
       return docs;
+    },
+
+    async getLinksGlobal() {
+      const links = await payload.findGlobal({
+        slug: "links",
+      });
+
+      return links;
     },
   };
 };

@@ -19,6 +19,7 @@ import { Une } from "./payload/globals/Une";
 import { cloudinaryStorage } from "payload-storage-cloudinary";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { Media } from "@/payload/collections/Media";
+import { Links } from "@/payload/globals/Links";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -39,7 +40,7 @@ export default buildConfig({
     Media,
     MediaBackUp,
   ],
-  globals: [Une],
+  globals: [Une, Links],
   editor: lexicalEditor({}),
   secret: process.env.PAYLOAD_SECRET || "",
   typescript: {

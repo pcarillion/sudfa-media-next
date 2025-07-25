@@ -1,10 +1,4 @@
-import {
-  Article,
-  Author,
-  Category,
-  // Media,
-  Presentation,
-} from "@/payload-types";
+import { Article, Author, Category, Link, Presentation } from "@/payload-types";
 import { PaginatedDocs } from "payload";
 
 // Interface pour l'API Handler
@@ -38,4 +32,5 @@ export interface APIHandler {
 
   // Presentations
   getPresentation(): Promise<Presentation[]>;
+  getLinksGlobal(): Promise<Link>;
 }

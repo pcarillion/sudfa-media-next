@@ -96,9 +96,11 @@ export interface Config {
   };
   globals: {
     une: Une;
+    links: Link;
   };
   globalsSelect: {
     une: UneSelect<false> | UneSelect<true>;
+    links: LinksSelect<false> | LinksSelect<true>;
   };
   locale: null;
   user: User & {
@@ -768,11 +770,39 @@ export interface Une {
   createdAt?: string | null;
 }
 /**
+ * Tous les liens sur les différentes pages
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "links".
+ */
+export interface Link {
+  id: number;
+  instagramUrl?: string | null;
+  facebookUrl?: string | null;
+  mediapartUrl?: string | null;
+  cagnotteUrl?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "une_select".
  */
 export interface UneSelect<T extends boolean = true> {
   articles?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "links_select".
+ */
+export interface LinksSelect<T extends boolean = true> {
+  instagramUrl?: T;
+  facebookUrl?: T;
+  mediapartUrl?: T;
+  cagnotteUrl?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
