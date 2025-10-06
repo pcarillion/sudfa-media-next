@@ -15,6 +15,15 @@ interface ArticleCardType {
   border?: "none" | "l" | "r" | "b" | "t";
 }
 
+/**
+ * Composant carte d'article avec options d'affichage configurables
+ * @param {ArticleCardType} props - Les propriétés du composant
+ * @param {Article} props.article - Données de l'article
+ * @param {boolean} [props.hasPicture=false] - Si true, affiche l'image sur desktop
+ * @param {boolean} [props.hasDescription=false] - Si true, affiche la description sur desktop
+ * @param {string} [props.border="none"] - Type de bordure à appliquer
+ * @returns {JSX.Element|null} Le composant carte d'article ou null si pas d'article
+ */
 export const ArticleCard = ({
   article,
   hasPicture = false,

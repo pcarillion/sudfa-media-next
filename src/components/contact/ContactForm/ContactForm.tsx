@@ -23,6 +23,10 @@ const fields: FormSchema = [
   },
 ];
 
+/**
+ * Composant formulaire de contact
+ * @returns {JSX.Element} Le formulaire de contact configuré avec les champs requis
+ */
 export const ContactForm = () => {
   return (
     <Form

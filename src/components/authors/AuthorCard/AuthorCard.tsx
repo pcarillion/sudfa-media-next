@@ -4,6 +4,12 @@ import { Author, Media } from "@/payload-types";
 import Link from "next/link";
 import React from "react";
 
+/**
+ * Composant carte d'auteur avec photo et description
+ * @param {Object} props - Les propriétés du composant
+ * @param {Author} props.author - Données de l'auteur à afficher
+ * @returns {JSX.Element} Carte d'auteur avec photo, nom et description
+ */
 export const AuthorCard = ({ author }: { author: Author }) => {
   return (
     <div className="w-full flex mx-auto box-border flex-col items-center px-3 py-12 mx-3 md:px-36 md:flex-row">

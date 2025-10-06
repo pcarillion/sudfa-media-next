@@ -3,6 +3,12 @@ import { Link } from "@/payload-types";
 import React from "react";
 import { FaFacebook, FaInstagram } from "react-icons/fa";
 
+/**
+ * Composant des liens vers les réseaux sociaux
+ * @param {Object} props - Les propriétés du composant
+ * @param {Link} props.links - Configuration des liens depuis Payload
+ * @returns {JSX.Element} Liens vers Facebook, Instagram et Mediapart
+ */
 export const SocialMedias = ({ links }: { links: Link }) => {
   return (
     <div className="flex flex-row justify-between items-center gap-x-4">

@@ -3,11 +3,19 @@ import type { Article, Author, Category } from "@/payload-types";
 import configPromise from "../../../payload.config";
 import { APIHandler } from "@/lib/service/payload/api.types";
 
+/**
+ * Crée une instance des actions API Payload
+ * @returns {Promise<APIHandler>} Handler avec toutes les méthodes API
+ */
 export const PayloadAPIActions = async (): Promise<APIHandler> => {
   const payload = await getPayload({ config: configPromise });
 
   return {
     // Articles
+    /**
+     * Récupère les articles pour la page d'accueil (une + récents)
+     * @returns {Promise<Article[]>} Articles à afficher sur l'accueil
+     */
     async getHomeArticles(): Promise<Article[]> {
       // Récupérer les articles à la une depuis le global "Une"
       const articles: Article[] = [];
@@ -36,6 +44,11 @@ export const PayloadAPIActions = async (): Promise<APIHandler> => {
       return articles;
     },
 
+    /**
+     * Récupère un article par son slug
+     * @param {string} slug - Slug de l'article
+     * @returns {Promise<Article | null>} Article trouvé ou null
+     */
     async getArticleBySlug(slug: string): Promise<Article | null> {
       const { docs } = await payload.find({
         collection: "articles",

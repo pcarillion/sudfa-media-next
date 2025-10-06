@@ -1,7 +1,10 @@
 import { Apropo, Article, Author, Category, Link } from "@/payload-types";
 import { PaginatedDocs } from "payload";
 
-// Interface pour l'API Handler
+/**
+ * Interface définissant les méthodes de l'API handler
+ * Abstraction pour les opérations CRUD sur les collections Payload
+ */
 export interface APIHandler {
   // Articles
   getHomeArticles(): Promise<Article[]>;

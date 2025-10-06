@@ -4,6 +4,10 @@ import { ArticleLexicalRenderer } from "@/components/utils/LexicalRenderer/Artic
 import { Api } from "@/lib/api";
 import React from "react";
 
+/**
+ * Conteneur de la page "À propos"
+ * @returns {Promise<JSX.Element>} Page à propos avec contenu Lexical
+ */
 export const AProposContainer = async () => {
   const api = await Api();
   const presentation = await api.getAPropos();

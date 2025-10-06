@@ -9,9 +9,22 @@ interface VideoBlockProps {
   title: string;
 }
 
+/**
+ * Composant de bloc vidéo pour YouTube et Vimeo
+ * @param {VideoBlockProps} props - Les propriétés du composant
+ * @param {string} props.videoType - Type de vidéo ('youtube' ou 'vimeo')
+ * @param {string} props.youtubeID - ID de la vidéo YouTube
+ * @param {string} props.vimeoID - ID de la vidéo Vimeo
+ * @param {string} props.title - Titre de la vidéo
+ * @returns {JSX.Element} Bloc vidéo intégré avec titre
+ */
 export const VideoBlock: React.FC<VideoBlockProps> = props => {
   const { videoType, youtubeID, vimeoID, title } = props;
 
+  /**
+   * Rend la vidéo selon son type
+   * @returns {JSX.Element|null} Iframe vidéo ou null si pas de données
+   */
   const renderVideo = () => {
     switch (videoType) {
       case "youtube":

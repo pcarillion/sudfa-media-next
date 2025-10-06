@@ -1,5 +1,9 @@
 import type { CollectionConfig } from "payload";
 
+/**
+ * Configuration de la collection Categories pour Payload CMS
+ * Définit la structure des catégories d'articles avec nom et description
+ */
 export const Categories: CollectionConfig = {
   slug: "categories",
   admin: {

@@ -8,6 +8,12 @@ import { formatDate } from "@/utils/Formatting";
 import Link from "next/link";
 import React from "react";
 
+/**
+ * Composant liste d'articles avec image et présentation
+ * @param {Object} props - Les propriétés du composant
+ * @param {Article[]} props.articles - Tableau des articles à afficher
+ * @returns {JSX.Element} Liste des articles formatés
+ */
 export const ArticlesList = ({ articles }: { articles: Article[] }) => {
   return (
     <ul>

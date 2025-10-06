@@ -4,6 +4,10 @@ import config from '@payload-config'
 let payloadInstance: any = null
 let initPromise: Promise<any> | null = null
 
+/**
+ * Obtient une instance singleton de Payload CMS
+ * @returns {Promise<any>} Instance de Payload initialisée
+ */
 export async function getPayloadInstance() {
   // Si on a déjà une instance, on la retourne
   if (payloadInstance) {
@@ -22,6 +26,11 @@ export async function getPayloadInstance() {
   return payloadInstance
 }
 
+/**
+ * Initialise Payload CMS avec la configuration
+ * @returns {Promise<any>} Instance Payload initialisée
+ * @throws {Error} Si l'initialisation échoue
+ */
 async function initializePayload() {
   try {
     console.log('🚀 Initialisation de Payload...')

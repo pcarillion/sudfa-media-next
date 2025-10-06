@@ -6,6 +6,14 @@ import { ArticlesList } from "../ArticlesList";
 import { Loader2 } from "lucide-react";
 import { Article } from "@/payload-types";
 
+/**
+ * Composant de liste d'articles avec pagination infinie
+ * @param {Object} props - Les propriétés du composant
+ * @param {Article[]} props.initialArticles - Articles initiaux à afficher
+ * @param {number} props.limit - Nombre d'articles par page
+ * @param {Function} props.getArticlesCallback - Fonction pour charger plus d'articles
+ * @returns {JSX.Element} Liste d'articles avec bouton "Charger plus"
+ */
 export const PaginatedArticlesList = ({
   initialArticles,
   limit,
@@ -22,6 +30,10 @@ export const PaginatedArticlesList = ({
   const [loading, setLoading] = useState(false);
   const [offset, setOffset] = useState(limit);
   const [maxAtteined, setMaxAtteined] = useState(false);
+  
+  /**
+   * Charge plus d'articles depuis l'API
+   */
   const loadMoreArticles = async () => {
     setLoading(true);
     const { articles: newArticles, nbResults } =

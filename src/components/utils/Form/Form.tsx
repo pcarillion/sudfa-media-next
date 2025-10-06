@@ -27,6 +27,14 @@ interface FormProps {
   submitText: string;
 }
 
+/**
+ * Composant formulaire générique avec gestion d'état
+ * @param {FormProps} props - Les propriétés du formulaire
+ * @param {Function} props.submitForm - Fonction pour soumettre le formulaire
+ * @param {FormSchema} props.formSchema - Schéma définissant les champs du formulaire
+ * @param {string} props.submitText - Texte du bouton de soumission
+ * @returns {JSX.Element} Le composant formulaire
+ */
 export const Form = ({ submitForm, formSchema, submitText }: FormProps) => {
   const [state, formAction] = useFormState<FormState, FormData>(
     submitForm,

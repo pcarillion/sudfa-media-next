@@ -7,6 +7,12 @@ import React from "react";
 
 const LIMIT = 5;
 
+/**
+ * Conteneur de la page auteur avec ses articles
+ * @param {Object} props - Les propriétés du composant
+ * @param {string} props.id - ID de l'auteur
+ * @returns {Promise<JSX.Element>} Page auteur avec carte et articles paginés
+ */
 export const AuteurContainer = async ({ id }: { id: string }) => {
   const api = await Api();
   const author = await api.getAuthorById(id);
@@ -15,6 +21,11 @@ export const AuteurContainer = async ({ id }: { id: string }) => {
     return <Container>Auteur non trouvé</Container>;
   }
 
+  /**
+   * Fonction callback pour charger les articles de l'auteur
+   * @param {number} offset - Décalage pour la pagination
+   * @returns {Promise<{articles: Article[], nbResults: number}>} Articles et nombre total
+   */
   const getArticles = async (
     offset: number
   ): Promise<{

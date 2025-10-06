@@ -7,6 +7,12 @@ import { PaginatedArticlesList } from "@/components/articles/PaginatedArticlesLi
 
 const LIMIT = 5;
 
+/**
+ * Conteneur de la page catégorie avec ses articles
+ * @param {Object} props - Les propriétés du composant
+ * @param {string} props.id - ID de la catégorie
+ * @returns {Promise<JSX.Element>} Page catégorie avec titre, description et articles paginés
+ */
 export const CategoryContainer = async ({ id }: { id: string }) => {
   const api = await Api();
   const category = await api.getCategoryById(id);
@@ -15,6 +21,11 @@ export const CategoryContainer = async ({ id }: { id: string }) => {
     return <Container>Catégorie non trouvée</Container>;
   }
 
+  /**
+   * Fonction callback pour charger les articles de la catégorie
+   * @param {number} offset - Décalage pour la pagination
+   * @returns {Promise<{articles: Article[], nbResults: number}>} Articles et nombre total
+   */
   const getArticles = async (offset: number) => {
     "use server";
     const api = await Api();

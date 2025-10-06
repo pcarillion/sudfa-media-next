@@ -36,6 +36,13 @@ interface LexicalContent {
   };
 }
 
+/**
+ * Composant pour rendre le contenu Lexical en React
+ * @param {Object} props - Les propriétés du composant
+ * @param {any} props.content - Contenu Lexical à rendre (JSON ou HTML string)
+ * @param {boolean} [props.small] - Si true, applique un style de texte plus petit
+ * @returns {JSX.Element|null} Le contenu rendu ou null si pas de contenu
+ */
 const LexicalRenderer = ({
   content,
   small,
@@ -65,6 +72,12 @@ const LexicalRenderer = ({
     return null;
   }
 
+  /**
+   * Rend un nœud Lexical individuel en React
+   * @param {LexicalNode} node - Nœud Lexical à rendre
+   * @param {number} index - Index du nœud pour la clé React
+   * @returns {React.ReactNode} Élément React correspondant au nœud
+   */
   const renderNode = (node: LexicalNode, index: number): React.ReactNode => {
     switch (node.type) {
       case "paragraph":

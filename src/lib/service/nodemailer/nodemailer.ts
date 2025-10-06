@@ -1,5 +1,12 @@
 import nodemailer from "nodemailer";
 
+/**
+ * Envoie un email via nodemailer
+ * @param {FormDataEntryValue} emailFrom - Adresse email de l'expéditeur
+ * @param {FormDataEntryValue} name - Nom de l'expéditeur
+ * @param {FormDataEntryValue} message - Message à envoyer
+ * @returns {Promise<boolean>} True si l'email a été envoyé avec succès, false sinon
+ */
 export const sendEmail = async (
   emailFrom: FormDataEntryValue,
   name: FormDataEntryValue,

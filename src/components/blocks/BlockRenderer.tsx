@@ -6,6 +6,13 @@ interface BlockRendererProps {
   blockData: any;
 }
 
+/**
+ * Composant de rendu générique pour les blocs de contenu
+ * @param {BlockRendererProps} props - Les propriétés du composant
+ * @param {string} props.blockType - Type de bloc à rendre
+ * @param {any} props.blockData - Données du bloc
+ * @returns {JSX.Element} Bloc rendu ou message d'erreur si non supporté
+ */
 export const BlockRenderer: React.FC<BlockRendererProps> = ({
   blockType,
   blockData,

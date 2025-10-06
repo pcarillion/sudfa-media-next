@@ -76,4 +76,9 @@ export const Media: CollectionConfig = {
   admin: {
     description: "Collection de médias stockés sur AWS S3",
   },
+  access: {
+    read: () => {
+      return true;
+    },
+  },
 };

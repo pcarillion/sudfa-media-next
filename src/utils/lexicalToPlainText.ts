@@ -50,6 +50,11 @@ export function lexicalToPlainText(content: any): string {
     return '';
   }
 
+  /**
+   * Extrait le texte d'un nœud Lexical récursivement
+   * @param {LexicalNode} node - Nœud Lexical à traiter
+   * @returns {string} Texte extrait du nœud
+   */
   const extractText = (node: LexicalNode): string => {
     let text = '';
 

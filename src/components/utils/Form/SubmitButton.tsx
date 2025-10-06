@@ -2,6 +2,12 @@ import React from "react";
 import { useFormStatus } from "react-dom";
 import { Loader2 } from "lucide-react";
 
+/**
+ * Bouton de soumission de formulaire avec indicateur de chargement
+ * @param {Object} props - Les propriétés du composant
+ * @param {string} props.text - Texte à afficher sur le bouton
+ * @returns {JSX.Element} Le composant bouton avec loader
+ */
 export function SubmitButton({ text }: { text: string }) {
   const { pending } = useFormStatus();
 

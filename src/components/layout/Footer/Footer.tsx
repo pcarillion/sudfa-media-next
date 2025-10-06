@@ -7,6 +7,10 @@ import { Typography } from "../../common/ui/Typography";
 import { SocialMedias } from "@/components/common/SocialMedia";
 import { Api } from "@/lib/api";
 
+/**
+ * Composant pied de page avec liens sociaux et informations
+ * @returns {Promise<JSX.Element>} Pied de page avec réseaux sociaux, contact et copyright
+ */
 export const Footer = async () => {
   const api = await Api();
   const links = await api.getLinksGlobal();

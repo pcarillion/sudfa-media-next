@@ -1,5 +1,9 @@
 import type { CollectionConfig } from "payload";
 
+/**
+ * Configuration de la collection Articles pour Payload CMS
+ * Définit la structure des articles avec titre, contenu, auteurs, catégories, etc.
+ */
 export const Articles: CollectionConfig = {
   slug: "articles",
   admin: {

@@ -1,5 +1,10 @@
 import moment from "moment";
 
+/**
+ * Formate une date au format DD/MM/YYYY
+ * @param {string} dateString - Date à formater (ISO string)
+ * @returns {string} Date formatée au format DD/MM/YYYY
+ */
 export const formatDate = (dateString: string) => {
   return moment(dateString).format("DD/MM/YYYY");
 };
@@ -17,6 +22,11 @@ export const renderLexicalToHTML = (lexicalData: any): string => {
   return processLexicalChildren(lexicalData.root.children)
 }
 
+/**
+ * Traite les enfants d'un nœud Lexical
+ * @param {any[]} children - Tableau des nœuds enfants
+ * @returns {string} HTML généré pour les enfants
+ */
 function processLexicalChildren(children: any[]): string {
   let html = ''
 
@@ -27,6 +37,11 @@ function processLexicalChildren(children: any[]): string {
   return html
 }
 
+/**
+ * Traite un nœud Lexical individuel et le convertit en HTML
+ * @param {any} node - Nœud Lexical à traiter
+ * @returns {string} HTML généré pour le nœud
+ */
 function processLexicalNode(node: any): string {
   switch (node.type) {
     case 'paragraph':

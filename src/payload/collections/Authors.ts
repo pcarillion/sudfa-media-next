@@ -1,5 +1,9 @@
 import type { CollectionConfig } from "payload";
 
+/**
+ * Configuration de la collection Authors pour Payload CMS
+ * Définit la structure des auteurs avec nom, type, description et photo
+ */
 export const Authors: CollectionConfig = {
   slug: "authors",
   admin: {

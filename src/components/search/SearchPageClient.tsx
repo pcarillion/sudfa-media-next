@@ -16,6 +16,10 @@ interface SearchState {
   query: string;
 }
 
+/**
+ * Composant client de la page de recherche avec gestion d'état
+ * @returns {JSX.Element} Page de recherche interactive avec résultats
+ */
 export default function SearchPageClient() {
   const [searchState, setSearchState] = useState<SearchState>({
     articles: [],
@@ -35,6 +39,10 @@ export default function SearchPageClient() {
     }
   }, []);
 
+  /**
+   * Gère la recherche d'articles
+   * @param {string} query - Terme de recherche
+   */
   const handleSearch = async (query: string) => {
     if (!query.trim()) return;
 

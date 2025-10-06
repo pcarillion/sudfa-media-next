@@ -18,6 +18,14 @@ interface SearchInputProps {
   placeholder?: string;
 }
 
+/**
+ * Composant de champ de recherche avec autocomplétion
+ * @param {SearchInputProps} props - Les propriétés du composant
+ * @param {Function} props.onSearch - Fonction appelée lors de la soumission de recherche
+ * @param {boolean} [props.loading=false] - État de chargement de la recherche
+ * @param {string} [props.placeholder="Rechercher des articles..."] - Texte placeholder
+ * @returns {JSX.Element} Le composant de recherche avec autocomplétion
+ */
 export const SearchInput: React.FC<SearchInputProps> = ({
   onSearch,
   loading = false,
@@ -66,7 +74,10 @@ export const SearchInput: React.FC<SearchInputProps> = ({
     fetchSuggestions();
   }, [debouncedQuery]);
 
-  // Handle form submission
+  /**
+   * Gère la soumission du formulaire de recherche
+   * @param {React.FormEvent} e - Événement de soumission
+   */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
@@ -76,14 +87,20 @@ export const SearchInput: React.FC<SearchInputProps> = ({
     }
   };
 
-  // Handle input change
+  /**
+   * Gère les changements dans le champ de saisie
+   * @param {React.ChangeEvent<HTMLInputElement>} e - Événement de changement
+   */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
     setSelectedIndex(-1);
   };
 
-  // Handle keyboard navigation
+  /**
+   * Gère la navigation au clavier dans les suggestions
+   * @param {React.KeyboardEvent} e - Événement clavier
+   */
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!showSuggestions || suggestions.length === 0) return;
 
@@ -125,7 +142,9 @@ export const SearchInput: React.FC<SearchInputProps> = ({
     }
   }, [selectedIndex]);
 
-  // Clear search
+  /**
+   * Efface la recherche et remet à zéro les états
+   */
   const clearSearch = () => {
     setQuery("");
     setSuggestions([]);
@@ -134,7 +153,10 @@ export const SearchInput: React.FC<SearchInputProps> = ({
     inputRef.current?.focus();
   };
 
-  // Handle suggestion click
+  /**
+   * Gère le clic sur une suggestion
+   * @param {AutocompleteSuggestion} suggestion - Suggestion cliquée
+   */
   const handleSuggestionClick = (suggestion: AutocompleteSuggestion) => {
     setShowSuggestions(false);
     setSelectedIndex(-1);

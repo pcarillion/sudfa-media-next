@@ -1,5 +1,14 @@
 import React from "react";
 
+/**
+ * Composant de typographie générique
+ * @param {Object} props - Les propriétés du composant
+ * @param {React.ReactNode} props.children - Contenu du composant
+ * @param {string} [props.classAdd] - Classes CSS additionnelles
+ * @param {boolean} [props.center=false] - Si true, centre le texte
+ * @param {boolean} [props.small=false] - Si true, utilise une taille de police plus petite
+ * @returns {JSX.Element} Le composant typographie
+ */
 export const Typography = ({
   children,
   classAdd,

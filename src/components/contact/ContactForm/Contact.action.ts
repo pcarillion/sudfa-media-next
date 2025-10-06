@@ -3,6 +3,12 @@
 import { FormState } from "@/components/utils/Form";
 import { sendEmail } from "@/lib/service/nodemailer";
 
+/**
+ * Action pour traiter le formulaire de contact
+ * @param {FormState} _state - État précédent du formulaire (non utilisé)
+ * @param {FormData} formData - Données du formulaire soumis
+ * @returns {Promise<FormState>} Nouvel état du formulaire avec le statut et le message
+ */
 export async function contactFormAction(
   _state: FormState,
   formData: FormData

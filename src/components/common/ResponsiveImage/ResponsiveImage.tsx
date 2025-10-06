@@ -8,6 +8,15 @@ interface ResponsiveImageProps {
   imageClass?: string;
 }
 
+/**
+ * Composant d'image responsive
+ * @param {ResponsiveImageProps} props - Les propriétés du composant
+ * @param {string} props.src - URL de l'image
+ * @param {string} props.alt - Texte alternatif pour l'accessibilité
+ * @param {string} [props.className] - Classes CSS pour le conteneur
+ * @param {string} [props.imageClass] - Classes CSS pour l'image
+ * @returns {JSX.Element} Le composant image responsive
+ */
 export const ResponsiveImage = ({
   src,
   alt,
