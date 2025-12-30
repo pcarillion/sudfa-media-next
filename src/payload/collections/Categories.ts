@@ -8,7 +8,7 @@ export const Categories: CollectionConfig = {
   slug: "categories",
   admin: {
     useAsTitle: "name",
-    defaultColumns: ["name", "order", "updatedAt"],
+    defaultColumns: ["name", "updatedAt"],
   },
   labels: {
     singular: "Catégorie",
@@ -27,6 +27,11 @@ export const Categories: CollectionConfig = {
       required: true,
       label: "Ordre",
       defaultValue: 0,
+      // Deprecated: use the global "ordre menu" instead.
+      admin: {
+        hidden: true,
+        description: "Deprecated: utilisez le global 'ordre menu'.",
+      },
     },
     {
       name: "description",

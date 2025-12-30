@@ -30,6 +30,7 @@ import { Media } from "@/payload/collections/Media";
 import { Links } from "@/payload/globals/Links";
 import { APropos } from "@/payload/globals/APropos";
 import { VideoBlock } from "@/payload/blocks/VideoBlock";
+import { OrdreMenu } from "@/payload/globals/OrdreMenu";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -42,7 +43,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Categories, Authors, Articles, Media, MediaBackUp],
-  globals: [Une, Links, APropos, OrdreAuteurs],
+  globals: [Une, Links, APropos, OrdreAuteurs, OrdreMenu],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,

@@ -6,6 +6,20 @@ export type OrdreAuteursGlobal = {
   horsEquipe?: Array<Author | number | string>;
 };
 
+export type OrdreMenuItem = {
+  itemType?:
+    | "accueil"
+    | "categorie"
+    | "auteurs"
+    | "a-propos"
+    | "recherche";
+  category?: Category | number | string;
+};
+
+export type OrdreMenuGlobal = {
+  items?: OrdreMenuItem[];
+};
+
 /**
  * Interface définissant les méthodes de l'API handler
  * Abstraction pour les opérations CRUD sur les collections Payload
@@ -34,6 +48,7 @@ export interface APIHandler {
   getAuthors(): Promise<Author[]>;
   getAuthorById(id: string): Promise<Author | null>;
   getOrdreAuteurs(): Promise<OrdreAuteursGlobal | null>;
+  getOrdreMenu(): Promise<OrdreMenuGlobal | null>;
 
   // Categories
   getCategories(): Promise<Category[]>;

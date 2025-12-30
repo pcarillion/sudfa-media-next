@@ -1,11 +1,12 @@
-/**
- * Type définissant un élément de navigation
- */
-export type NavItem = {
-  /** Libellé à afficher dans la navigation */
-  label: string;
-  /** Ordre d'affichage dans le menu */
-  order: number;
-  /** Identifiant unique de l'élément */
-  id: number;
-};
+export type MenuItem =
+  | {
+      type: "category";
+      id: number | string;
+      label: string;
+      href: string;
+    }
+  | {
+      type: "accueil" | "auteurs" | "a-propos" | "recherche";
+      label: string;
+      href: string;
+    };

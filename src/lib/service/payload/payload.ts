@@ -4,6 +4,7 @@ import configPromise from "../../../payload.config";
 import {
   APIHandler,
   OrdreAuteursGlobal,
+  OrdreMenuGlobal,
 } from "@/lib/service/payload/api.types";
 
 /**
@@ -202,6 +203,17 @@ export const PayloadAPIActions = async (): Promise<APIHandler> => {
           depth: 0,
         });
         return ordre as OrdreAuteursGlobal;
+      } catch (error) {
+        return null;
+      }
+    },
+    async getOrdreMenu(): Promise<OrdreMenuGlobal | null> {
+      try {
+        const ordre = await payload.findGlobal({
+          slug: "ordre-menu",
+          depth: 1,
+        });
+        return ordre as OrdreMenuGlobal;
       } catch (error) {
         return null;
       }

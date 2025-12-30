@@ -4,14 +4,15 @@ import { Container } from "../../common/Container";
 import { FaHandsHelping } from "react-icons/fa";
 import { ResponsiveImage } from "../../common/ResponsiveImage";
 import { Navbar } from "./Navbar";
-import { mapCategoriesToNavItems } from "./Header.utils";
+import { buildMenuItems } from "./Header.utils";
 import { Api } from "@/lib/api";
 import { SocialMedias } from "@/components/common/SocialMedia";
 
 export const Header = async () => {
   const api = await Api();
   const categories = await api.getCategories();
-  const navItems = mapCategoriesToNavItems(categories);
+  const ordreMenu = await api.getOrdreMenu();
+  const navItems = buildMenuItems(categories, ordreMenu);
   const links = await api.getLinksGlobal();
 
   return (

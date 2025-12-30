@@ -3,14 +3,14 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
-import { NavItem } from "./NavBar.types";
+import { MenuItem } from "./NavBar.types";
 import { usePathname } from "next/navigation";
 import { Search } from "lucide-react";
 import { FaHandsHelping } from "react-icons/fa";
 import { Link as LinkType } from "@/payload-types";
 
 interface NavBarProps {
-  navItems: NavItem[];
+  navItems: MenuItem[];
   links: LinkType;
 }
 
@@ -28,51 +28,27 @@ export const Navbar = ({ navItems, links }: NavBarProps) => {
   return (
     <nav className="w-full my-4 py-2 border border-b-2 border-x-slate-300 border-slate-700">
       <ul className="hidden md:flex flex-wrap justify-center">
-        <Link
-          href={`/`}
-          className={`${
-            pathName === "/" ? "font-bold" : ""
-          }  hover:no-underline hover:opacity-70`}
-        >
-          <li className="px-3 m-2 hover:no-underline">Accueil</li>
-        </Link>
-        {navItems.map(({ label, id }) => (
-          <Link
-            href={`/category/${id}`}
-            key={id}
-            className={`${
-              pathName === `/category/${id}` ? "font-bold" : ""
-            } hover:no-underline hover:opacity-70`}
-          >
-            <li key={id} className="px-4 m-2 hover:no-underline">
-              {label}
-            </li>
-          </Link>
-        ))}
-        <Link
-          href={`/auteurs`}
-          className={`${
-            pathName === "/auteurs" ? "font-bold" : ""
-          } hover:no-underline hover:opacity-70`}
-        >
-          <li className="px-4 m-2 hover:no-underline">Contributeurs</li>
-        </Link>
-        <Link
-          href={`/a-propos`}
-          className={`${
-            pathName === "/a-propos" ? "font-bold" : ""
-          } hover:no-underline hover:opacity-70`}
-        >
-          <li className="px-4 m-2 hover:no-underline">A propos</li>
-        </Link>
-        <Link
-          href="/recherche"
-          className={`${pathName === "/recherche" ? "font-bold" : ""} hover:no-underline hover:opacity-70`}
-        >
-          <li className="px-4 m-2 hover:no-underline h-full">
-            <Search className="h-5 w-5" />
-          </li>
-        </Link>
+        {navItems.map((item) => {
+          const isActive = pathName === item.href;
+          const itemLabel =
+            item.type === "recherche" ? (
+              <Search className="h-5 w-5" />
+            ) : (
+              item.label
+            );
+          const key = "id" in item ? item.id : item.href;
+          return (
+            <Link
+              href={item.href}
+              key={`${item.type}-${key}`}
+              className={`${isActive ? "font-bold" : ""} hover:no-underline hover:opacity-70`}
+            >
+              <li className="px-4 m-2 hover:no-underline h-full">
+                {itemLabel}
+              </li>
+            </Link>
+          );
+        })}
       </ul>
       {/* Mobile Navigation Icon */}
       <div onClick={handleNav} className="block md:hidden mx-auto w-min">
@@ -94,32 +70,22 @@ export const Navbar = ({ navItems, links }: NavBarProps) => {
           <AiOutlineClose size={20} />
         </div>
         <ul className="h-full flex flex-col">
-          <Link href={`/`}>
-            <li className="p-3">Accueil</li>
-          </Link>
           {/* Mobile Navigation Items */}
-          {navItems.map(({ label, id }) => (
-            <Link href={`/category/${id}`} key={id}>
-              <li key={id} className="p-3">
-                {label}
-              </li>
-            </Link>
-          ))}
-          <Link href={`/auteurs`}>
-            <li className="p-3">Contributeurs</li>
-          </Link>
-          <Link href={`/a-propos`}>
-            <li className="p-3">A propos</li>
-          </Link>
-          <li className="border-t p-3 flex flex-row gap-4 items-center justify-between">
-            <Link
-              href="/recherche"
-              className={`${pathName === "/recherche" ? "font-bold" : ""} hover:no-underline hover:opacity-70`}
-            >
-              <div className="hover:no-underline h-full">
+          {navItems.map((item) => {
+            const itemLabel =
+              item.type === "recherche" ? (
                 <Search className="h-5 w-5" />
-              </div>
-            </Link>
+              ) : (
+                item.label
+              );
+            const key = "id" in item ? item.id : item.href;
+            return (
+              <Link href={item.href} key={`${item.type}-${key}`}>
+                <li className="p-3">{itemLabel}</li>
+              </Link>
+            );
+          })}
+          <li className="border-t p-3 flex flex-row gap-4 items-center justify-between">
             <Link
               className="bg-[#D2270F] flex flex-row items-center gap-2 text-white px-3 py-1 mt-1 border border-[#D2270F] hover:bg-white hover:text-[#D2270F] hover:no-underline ease-in-out"
               href={links.cagnotteUrl || ""}
