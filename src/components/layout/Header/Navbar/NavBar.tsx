@@ -55,7 +55,7 @@ export const Navbar = ({ navItems, links }: NavBarProps) => {
             pathName === "/auteurs" ? "font-bold" : ""
           } hover:no-underline hover:opacity-70`}
         >
-          <li className="px-4 m-2 hover:no-underline">L&apos;Equipe</li>
+          <li className="px-4 m-2 hover:no-underline">Contributeurs</li>
         </Link>
         <Link
           href={`/a-propos`}
@@ -106,7 +106,7 @@ export const Navbar = ({ navItems, links }: NavBarProps) => {
             </Link>
           ))}
           <Link href={`/auteurs`}>
-            <li className="p-3">Les Auteurs</li>
+            <li className="p-3">Contributeurs</li>
           </Link>
           <Link href={`/a-propos`}>
             <li className="p-3">A propos</li>

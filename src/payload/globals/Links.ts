@@ -27,6 +27,11 @@ export const Links: GlobalConfig = {
       type: "text",
       label: "Cagnotte",
     },
+    {
+      name: "contactEmail",
+      type: "text",
+      label: "Email de contact",
+    },
   ],
   access: {
     read: () => true, // Public en lecture

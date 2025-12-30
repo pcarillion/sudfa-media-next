@@ -34,36 +34,42 @@ export const ArticleCard = ({
   const thumbnail = article.photoPrincipale as Media;
   return (
     <div
-      className={`w-full p-3 ${
+      className={`group w-full p-3 ${
         border === "none" ? "" : `border-${border} border-slate-300`
       }
       `}
     >
-      {thumbnail && (
-        <AspectRatioImage
-          className={`block pb-3 ${hasPicture ? "" : "md:hidden"}`}
-          src={thumbnail.url!}
-          alt={thumbnail.alt}
-        />
-      )}
-      <div>
-        <Link href={`/article/${article.slug}`}>
-          <H4>{article.titre}</H4>
-        </Link>
-        <Typography classAdd="py-2" small>
-          {formatDate(article.date)} - par{" "}
-          <Link href={`/auteur/${(article.authors as Author[])[0].id}`}>
-            {(article.authors as Author[])[0].name}
-          </Link>
-        </Typography>
+      <Link
+        href={`/article/${article.slug}`}
+        className="block no-underline hover:no-underline"
+      >
+        {thumbnail && (
+          <AspectRatioImage
+            className={`block pb-3 ${hasPicture ? "" : "md:hidden"}`}
+            src={thumbnail.url!}
+            alt={thumbnail.alt}
+          />
+        )}
+        <div>
+          <H4 classAdd="group-hover:underline">{article.titre}</H4>
+          <Typography classAdd="py-2" small>
+            {formatDate(article.date)} - par{" "}
+            <Link
+              href={`/auteur/${(article.authors as Author[])[0].id}`}
+              className="hover:underline"
+            >
+              {(article.authors as Author[])[0].name}
+            </Link>
+          </Typography>
 
-        <Typography
-          classAdd={`py-2 ${hasDescription ? "" : "md:hidden"}`}
-          small
-        >
-          <LexicalRenderer content={article.presentation} />
-        </Typography>
-      </div>
+          <Typography
+            classAdd={`py-2 ${hasDescription ? "" : "md:hidden"}`}
+            small
+          >
+            <LexicalRenderer content={article.presentation} />
+          </Typography>
+        </div>
+      </Link>
     </div>
   );
 };

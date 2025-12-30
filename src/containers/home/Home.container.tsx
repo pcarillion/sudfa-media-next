@@ -9,11 +9,15 @@ import React from "react";
 export const HomeContainer = async () => {
   const api = await Api();
   let articles = await api.getHomeArticles();
-  let politicArticles = await api.getArticlesByCategory("Politique", 3, true);
+  let politicArticles = await api.getArticlesByCategory("Politique", 2, true);
   let cultureArticles = await api.getArticlesByCategory("Culture", 2, true);
-  let lutteArticles = await api.getArticlesByCategory("Luttes", 2, true);
-  let evenementsArticle = await api.getArticlesByCategory("Evenements", 1);
-  let filmsArticles = await api.getArticlesByCategory("Film", 2);
+  let actualitesArticles = await api.getArticlesByCategory(
+    "Actualités au Soudan",
+    2,
+    true
+  );
+  let evenementsArticle = await api.getArticlesByCategory("Evenements", 3);
+  let filmsArticles = await api.getArticlesByCategory("Film", 1);
 
   return (
     <Container>
@@ -53,18 +57,36 @@ export const HomeContainer = async () => {
           <div>
             {politicArticles.length > 0 && (
               <>
-                <H3 classAdd="p-3">Politique</H3>
-                <ArticleCard article={politicArticles[0]} hasPicture />
+                <H3 classAdd="p-3">Evenements</H3>
+                <ArticleCard article={evenementsArticle[0]} hasPicture />
                 <div className="md:grid md:grid-cols-2">
                   {/* left articles: 2 -- span 5 */}
-                  <ArticleCard article={politicArticles[1]} hasPicture />
-                  <ArticleCard article={politicArticles[2]} hasPicture />
+                  <ArticleCard article={evenementsArticle[1]} hasPicture />
+                  <ArticleCard article={evenementsArticle[2]} hasPicture />
                 </div>
               </>
             )}
           </div>
         </div>
         <div className="md:col-span-8 md:border-t">
+          {politicArticles.length > 0 && (
+            <>
+              <H3 classAdd="p-3">Politique</H3>
+              <div className="md:grid md:grid-cols-8">
+                {politicArticles.map(article => {
+                  return (
+                    <div className="md:col-span-4" key={article.id}>
+                      <ArticleCard
+                        article={article}
+                        hasPicture
+                        hasDescription
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          )}
           {cultureArticles.length > 0 && (
             <>
               <H3 classAdd="p-3">Culture</H3>
@@ -83,35 +105,17 @@ export const HomeContainer = async () => {
               </div>
             </>
           )}
-          {lutteArticles.length > 0 && (
-            <>
-              <H3 classAdd="p-3">Luttes</H3>
-              <div className="md:grid md:grid-cols-8">
-                {lutteArticles.map(article => {
-                  return (
-                    <div className="md:col-span-4" key={article.id}>
-                      <ArticleCard
-                        article={article}
-                        hasPicture
-                        hasDescription
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </>
-          )}
         </div>
         {/* {presentation && ( */}
         <div className="md:col-span-4 md:border-l md:border-t">
-          <H3 classAdd="p-3">Dernier événement</H3>
+          <H3 classAdd="p-3">Film</H3>
           <div className="px-3">
             {/* <LexicalRenderer small content={presentation.shortVersion_html} /> */}
-            <ArticleCard article={evenementsArticle[0]} hasPicture />
+            <ArticleCard article={filmsArticles[0]} hasPicture />
           </div>
           <div>
-            <H3 classAdd="p-3">Film</H3>
-            {filmsArticles.map(article => {
+            <H3 classAdd="p-3">Actualités au Soudan</H3>
+            {actualitesArticles.map(article => {
               return (
                 <ArticleCard key={article.id} article={article} hasPicture />
               );

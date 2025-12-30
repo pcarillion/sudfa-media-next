@@ -1,3 +1,4 @@
+import { cn } from "@/components/utils";
 import React from "react";
 
 /**
@@ -8,8 +9,10 @@ import React from "react";
  */
 export const H4 = ({
   children,
+  classAdd,
 }: Readonly<{
   children: React.ReactNode;
+  classAdd?: string;
 }>) => {
-  return <h4 className="text-xl text-bold">{children}</h4>;
+  return <h4 className={cn("text-xl text-bold", classAdd)}>{children}</h4>;
 };
