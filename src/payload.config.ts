@@ -22,6 +22,7 @@ import { MediaBackUp } from "./payload/collections/MediaBackup";
 
 // Import globals
 import { Une } from "./payload/globals/Une";
+import { OrdreAuteurs } from "./payload/globals/OrdreAuteurs";
 
 import { cloudinaryStorage } from "payload-storage-cloudinary";
 import { s3Storage } from "@payloadcms/storage-s3";
@@ -41,7 +42,7 @@ export default buildConfig({
     },
   },
   collections: [Users, Categories, Authors, Articles, Media, MediaBackUp],
-  globals: [Une, Links, APropos],
+  globals: [Une, Links, APropos, OrdreAuteurs],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,

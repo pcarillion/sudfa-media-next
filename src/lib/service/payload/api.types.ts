@@ -1,6 +1,11 @@
 import { Apropo, Article, Author, Category, Link } from "@/payload-types";
 import { PaginatedDocs } from "payload";
 
+export type OrdreAuteursGlobal = {
+  equipe?: Array<Author | number | string>;
+  horsEquipe?: Array<Author | number | string>;
+};
+
 /**
  * Interface définissant les méthodes de l'API handler
  * Abstraction pour les opérations CRUD sur les collections Payload
@@ -28,6 +33,7 @@ export interface APIHandler {
   // Authors
   getAuthors(): Promise<Author[]>;
   getAuthorById(id: string): Promise<Author | null>;
+  getOrdreAuteurs(): Promise<OrdreAuteursGlobal | null>;
 
   // Categories
   getCategories(): Promise<Category[]>;

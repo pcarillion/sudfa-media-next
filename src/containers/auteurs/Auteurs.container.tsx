@@ -8,24 +8,56 @@ import React from "react";
 export default async function AuteursContainer() {
   const api = await Api();
   const authors = await api.getAuthors();
+  const ordreAuteurs = await api.getOrdreAuteurs();
+  const authorsById = new Map(authors.map(author => [author.id, author]));
+
+  const resolveId = (value: typeof authors[number] | number | string) => {
+    if (value && typeof value === "object") {
+      return value.id;
+    }
+    return value;
+  };
+
+  const orderAuthors = (
+    orderedList: Array<typeof authors[number] | number | string> | undefined,
+    predicate: (author: typeof authors[number]) => boolean
+  ) => {
+    const orderedIds = (orderedList ?? [])
+      .map(resolveId)
+      .filter((id): id is number | string => id !== undefined && id !== null);
+    const ordered = orderedIds
+      .map(id => authorsById.get(id))
+      .filter((author): author is typeof authors[number] => Boolean(author))
+      .filter(predicate);
+    const orderedSet = new Set(ordered.map(author => author.id));
+    const remaining = authors.filter(
+      author => predicate(author) && !orderedSet.has(author.id)
+    );
+    return [...ordered, ...remaining];
+  };
+
+  const equipeAuthors = orderAuthors(
+    ordreAuteurs?.equipe,
+    author => author.type === "equipe"
+  );
+  const horsEquipeAuthors = orderAuthors(
+    ordreAuteurs?.horsEquipe,
+    author => author.type !== "equipe"
+  );
   return (
     <Container>
       <H1 center>Contributeurs</H1>
       <H3 classAdd="md:px-36 px-3">L&apos;Equipe</H3>
       <ul className="py-">
-        {authors
-          .filter(author => author.type === "equipe")
-          .map(author => {
-            return <AuthorCard key={author.id} author={author} />;
-          })}
+        {equipeAuthors.map(author => {
+          return <AuthorCard key={author.id} author={author} />;
+        })}
       </ul>
       <H3 classAdd="md:px-36 px-3">Les contributeurs</H3>
       <ul className="py-">
-        {authors
-          .filter(author => author.type !== "equipe")
-          .map(author => {
-            return <AuthorCard key={author.id} author={author} />;
-          })}
+        {horsEquipeAuthors.map(author => {
+          return <AuthorCard key={author.id} author={author} />;
+        })}
       </ul>
     </Container>
   );

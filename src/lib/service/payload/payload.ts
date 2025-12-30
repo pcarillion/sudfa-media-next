@@ -1,7 +1,10 @@
 import { getPayload, PaginatedDocs } from "payload";
 import type { Article, Author, Category } from "@/payload-types";
 import configPromise from "../../../payload.config";
-import { APIHandler } from "@/lib/service/payload/api.types";
+import {
+  APIHandler,
+  OrdreAuteursGlobal,
+} from "@/lib/service/payload/api.types";
 
 /**
  * Crée une instance des actions API Payload
@@ -188,6 +191,17 @@ export const PayloadAPIActions = async (): Promise<APIHandler> => {
         });
 
         return author;
+      } catch (error) {
+        return null;
+      }
+    },
+    async getOrdreAuteurs(): Promise<OrdreAuteursGlobal | null> {
+      try {
+        const ordre = await payload.findGlobal({
+          slug: "ordre-auteurs",
+          depth: 0,
+        });
+        return ordre as OrdreAuteursGlobal;
       } catch (error) {
         return null;
       }
