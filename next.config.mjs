@@ -5,12 +5,6 @@ const nextConfig = {
   // Force dynamic rendering globally - disable static optimization
   output: 'standalone',
   
-  publicRuntimeConfig: {
-    // Will be available on both server and client
-    SUDFA_BACKEND_BASE_URL: process.env.SUDFA_BACKEND_BASE_URL,
-    // NEXT_PUBLIC_API_KEY: process.env.NEXT_PUBLIC_API_KEY,
-  },
-  
   // Headers configuration for video embedding
   async headers() {
     return [
@@ -74,9 +68,7 @@ const nextConfig = {
     ],
   },
   
-  experimental: {
-    reactCompiler: false ?? false,
-  },
+  reactCompiler: false ?? false,
 }
 
 export default withPayload(nextConfig)
