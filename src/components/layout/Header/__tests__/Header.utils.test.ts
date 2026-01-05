@@ -7,7 +7,6 @@ const createMockCategory = (overrides: Partial<Category> = {}): Category => ({
   name: "Test Category",
   order: 1,
   description: "Test description",
-  slug: "test-category",
   createdAt: "2023-01-01T00:00:00.000Z",
   updatedAt: "2023-01-01T00:00:00.000Z",
   ...overrides,

@@ -11,11 +11,17 @@ export default async function AuteursContainer() {
   const ordreAuteurs = await api.getOrdreAuteurs();
   const authorsById = new Map(authors.map(author => [author.id, author]));
 
-  const resolveId = (value: typeof authors[number] | number | string) => {
+  const normalizeId = (
+    value: typeof authors[number] | number | string
+  ): number | null => {
     if (value && typeof value === "object") {
       return value.id;
     }
-    return value;
+    if (typeof value === "string") {
+      const parsed = Number(value);
+      return Number.isFinite(parsed) ? parsed : null;
+    }
+    return typeof value === "number" ? value : null;
   };
 
   const orderAuthors = (
@@ -23,8 +29,8 @@ export default async function AuteursContainer() {
     predicate: (author: typeof authors[number]) => boolean
   ) => {
     const orderedIds = (orderedList ?? [])
-      .map(resolveId)
-      .filter((id): id is number | string => id !== undefined && id !== null);
+      .map(normalizeId)
+      .filter((id): id is number => id !== null);
     const ordered = orderedIds
       .map(id => authorsById.get(id))
       .filter((author): author is typeof authors[number] => Boolean(author))

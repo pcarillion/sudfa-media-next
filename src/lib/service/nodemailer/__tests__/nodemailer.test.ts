@@ -1,13 +1,37 @@
 import { sendEmail } from '../nodemailer';
-import nodemailer from 'nodemailer';
+import nodemailer, { type SendMailOptions } from 'nodemailer';
 
 // Mock nodemailer
 jest.mock('nodemailer');
 
 const mockNodemailer = nodemailer as jest.Mocked<typeof nodemailer>;
 
+type SendMailCallback = (
+  error: Error | null,
+  info: { messageId: string } | null
+) => void;
+type MockTransporter = {
+  sendMail: jest.Mock<void, [SendMailOptions, SendMailCallback]>;
+};
+
 describe('nodemailer service', () => {
-  let mockTransporter: any;
+  let mockTransporter: MockTransporter;
+
+  const mockSendMailSuccess = () => {
+    mockTransporter.sendMail.mockImplementation(
+      (_options: SendMailOptions, callback: SendMailCallback) => {
+        callback(null, { messageId: 'test-id' });
+      }
+    );
+  };
+
+  const mockSendMailError = (error: Error) => {
+    mockTransporter.sendMail.mockImplementation(
+      (_options: SendMailOptions, callback: SendMailCallback) => {
+        callback(error, null);
+      }
+    );
+  };
 
   beforeEach(() => {
     // Reset mocks
@@ -17,8 +41,10 @@ describe('nodemailer service', () => {
     mockTransporter = {
       sendMail: jest.fn(),
     };
-    
-    mockNodemailer.createTransporter.mockReturnValue(mockTransporter);
+
+    mockNodemailer.createTransport.mockReturnValue(
+      mockTransporter as unknown as nodemailer.Transporter
+    );
 
     // Mock environment variables
     process.env.NODEMAILER_SERVICE = 'gmail';
@@ -35,13 +61,11 @@ describe('nodemailer service', () => {
 
   describe('sendEmail', () => {
     it('should create transporter with correct configuration', async () => {
-      mockTransporter.sendMail.mockImplementation((options, callback) => {
-        callback(null, { messageId: 'test-id' });
-      });
+      mockSendMailSuccess();
 
       await sendEmail('sender@example.com', 'John Doe', 'Test message');
 
-      expect(mockNodemailer.createTransporter).toHaveBeenCalledWith({
+      expect(mockNodemailer.createTransport).toHaveBeenCalledWith({
         service: 'gmail',
         secure: false,
         auth: {
@@ -52,9 +76,7 @@ describe('nodemailer service', () => {
     });
 
     it('should send email with correct mail options', async () => {
-      mockTransporter.sendMail.mockImplementation((options, callback) => {
-        callback(null, { messageId: 'test-id' });
-      });
+      mockSendMailSuccess();
 
       await sendEmail('sender@example.com', 'John Doe', 'Test message');
 
@@ -70,9 +92,7 @@ describe('nodemailer service', () => {
     });
 
     it('should return true when email is sent successfully', async () => {
-      mockTransporter.sendMail.mockImplementation((options, callback) => {
-        callback(null, { messageId: 'test-id' });
-      });
+      mockSendMailSuccess();
 
       const result = await sendEmail('sender@example.com', 'John Doe', 'Test message');
 
@@ -81,10 +101,8 @@ describe('nodemailer service', () => {
 
     it('should return false when email sending fails', async () => {
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
-      
-      mockTransporter.sendMail.mockImplementation((options, callback) => {
-        callback(new Error('SMTP Error'), null);
-      });
+
+      mockSendMailError(new Error('SMTP Error'));
 
       const result = await sendEmail('sender@example.com', 'John Doe', 'Test message');
 
@@ -95,9 +113,7 @@ describe('nodemailer service', () => {
     });
 
     it('should handle special characters in email content', async () => {
-      mockTransporter.sendMail.mockImplementation((options, callback) => {
-        callback(null, { messageId: 'test-id' });
-      });
+      mockSendMailSuccess();
 
       const result = await sendEmail(
         'jean.françois@example.com',
@@ -115,9 +131,7 @@ describe('nodemailer service', () => {
     });
 
     it('should handle very long messages', async () => {
-      mockTransporter.sendMail.mockImplementation((options, callback) => {
-        callback(null, { messageId: 'test-id' });
-      });
+      mockSendMailSuccess();
 
       const longMessage = 'A'.repeat(5000);
       const result = await sendEmail('sender@example.com', 'John Doe', longMessage);
@@ -132,9 +146,7 @@ describe('nodemailer service', () => {
     });
 
     it('should handle FormDataEntryValue types correctly', async () => {
-      mockTransporter.sendMail.mockImplementation((options, callback) => {
-        callback(null, { messageId: 'test-id' });
-      });
+      mockSendMailSuccess();
 
       // FormDataEntryValue can be string or File
       const emailValue: FormDataEntryValue = 'test@example.com';
@@ -151,13 +163,11 @@ describe('nodemailer service', () => {
       process.env.NODEMAILER_EMAIL = 'different@example.com';
       process.env.NODEMAILER_PASS = 'differentpassword';
 
-      mockTransporter.sendMail.mockImplementation((options, callback) => {
-        callback(null, { messageId: 'test-id' });
-      });
+      mockSendMailSuccess();
 
       await sendEmail('sender@example.com', 'John Doe', 'Test message');
 
-      expect(mockNodemailer.createTransporter).toHaveBeenCalledWith({
+      expect(mockNodemailer.createTransport).toHaveBeenCalledWith({
         service: 'yahoo',
         secure: false,
         auth: {
@@ -177,12 +187,10 @@ describe('nodemailer service', () => {
 
     it('should handle SMTP authentication errors', async () => {
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
-      
-      mockTransporter.sendMail.mockImplementation((options, callback) => {
-        const authError = new Error('Invalid login');
-        authError.name = 'AuthenticationError';
-        callback(authError, null);
-      });
+
+      const authError = new Error('Invalid login');
+      authError.name = 'AuthenticationError';
+      mockSendMailError(authError);
 
       const result = await sendEmail('sender@example.com', 'John Doe', 'Test message');
 
@@ -194,12 +202,10 @@ describe('nodemailer service', () => {
 
     it('should handle network timeout errors', async () => {
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
-      
-      mockTransporter.sendMail.mockImplementation((options, callback) => {
-        const timeoutError = new Error('Connection timeout');
-        timeoutError.name = 'TimeoutError';
-        callback(timeoutError, null);
-      });
+
+      const timeoutError = new Error('Connection timeout');
+      timeoutError.name = 'TimeoutError';
+      mockSendMailError(timeoutError);
 
       const result = await sendEmail('sender@example.com', 'John Doe', 'Test message');
 
@@ -210,9 +216,7 @@ describe('nodemailer service', () => {
     });
 
     it('should handle empty string values', async () => {
-      mockTransporter.sendMail.mockImplementation((options, callback) => {
-        callback(null, { messageId: 'test-id' });
-      });
+      mockSendMailSuccess();
 
       const result = await sendEmail('', '', '');
 
@@ -226,9 +230,7 @@ describe('nodemailer service', () => {
     });
 
     it('should format email text correctly with newlines', async () => {
-      mockTransporter.sendMail.mockImplementation((options, callback) => {
-        callback(null, { messageId: 'test-id' });
-      });
+      mockSendMailSuccess();
 
       await sendEmail('test@example.com', 'John Doe', 'Multi\nline\nmessage');
 

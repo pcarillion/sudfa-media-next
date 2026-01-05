@@ -30,7 +30,11 @@
         "./src/payload.config.ts"
       ]
     },
-    "target": "ES2017"
+    "target": "ES2017",
+    "types": [
+      "jest",
+      "node"
+    ]
   },
   "include": [
     "next-env.d.ts",
@@ -39,11 +43,6 @@
     ".next/types/**/*.ts",
     "src/app/api/categories",
     ".next/dev/types/**/*.ts"
-  ],
-  "types": [
-    "cypress",
-    "jest",
-    "node"
   ],
   "exclude": [
     "node_modules",

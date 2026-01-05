@@ -104,11 +104,15 @@ export interface Config {
     une: Une;
     links: Link;
     apropos: Apropo;
+    "ordre-auteurs": OrdreAuteurs;
+    "ordre-menu": OrdreMenu;
   };
   globalsSelect: {
     une: UneSelect<false> | UneSelect<true>;
     links: LinksSelect<false> | LinksSelect<true>;
     apropos: AproposSelect<false> | AproposSelect<true>;
+    "ordre-auteurs": OrdreAuteursSelect<false> | OrdreAuteursSelect<true>;
+    "ordre-menu": OrdreMenuSelect<false> | OrdreMenuSelect<true>;
   };
   locale: null;
   user: User & {
@@ -746,6 +750,30 @@ export interface Apropo {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ordre-auteurs".
+ */
+export interface OrdreAuteurs {
+  id: number;
+  equipe?: (number | Author)[] | null;
+  horsEquipe?: (number | Author)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ordre-menu".
+ */
+export interface OrdreMenu {
+  id: number;
+  items?: {
+    itemType: "accueil" | "categorie" | "auteurs" | "a-propos" | "recherche";
+    category?: (number | Category) | null;
+  }[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "une_select".
  */
 export interface UneSelect<T extends boolean = true> {
@@ -773,6 +801,27 @@ export interface LinksSelect<T extends boolean = true> {
  */
 export interface AproposSelect<T extends boolean = true> {
   content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ordre-auteurs_select".
+ */
+export interface OrdreAuteursSelect<T extends boolean = true> {
+  equipe?: T;
+  horsEquipe?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ordre-menu_select".
+ */
+export interface OrdreMenuSelect<T extends boolean = true> {
+  items?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
