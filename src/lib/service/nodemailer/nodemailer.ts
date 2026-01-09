@@ -33,7 +33,7 @@ export const sendEmail = async (
   //   Définissez les options de l'email
   let mailOptions = {
     from: process.env.NODEMAILER_EMAIL, // Adresse de l'expéditeur
-    to: process.env.NODEMAILER_EMAIL, // Adresse du destinataire
+    to: "Sudfamedia@gmail.com", // Adresse du destinataire
     subject: "Contact sur Sudfa", // Sujet de l'email
     text: `Nouveau message de ${name} \n Email: ${emailFrom} \n Message: ${message}`, // Corps de l'email
   };
