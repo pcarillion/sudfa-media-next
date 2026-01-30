@@ -11,6 +11,7 @@ interface AspectRatioImageProps {
   priority?: boolean;
   loading?: "lazy" | "eager";
   quality?: number;
+  decoding?: "async" | "auto" | "sync";
 }
 
 /**
@@ -32,12 +33,14 @@ export const AspectRatioImage = ({
   sizes = "100vw",
   priority,
   loading,
-  quality,
+  quality = 75,
+  decoding = "async",
 }: AspectRatioImageProps) => {
+  const resolvedLoading = priority ? undefined : loading ?? "lazy";
   return (
     <div className={`${className} w-full`}>
       {" "}
-      <div className={`aspect-ratio ${aspectRatio}`}>
+      <div className={`aspect-ratio ${aspectRatio} image-skeleton`}>
         <Image
           src={src}
           alt={alt}
@@ -46,8 +49,10 @@ export const AspectRatioImage = ({
           style={{ objectFit: "cover" }}
           sizes={sizes}
           priority={priority}
-          loading={loading}
+          loading={resolvedLoading}
           quality={quality}
+          decoding={decoding}
+          fetchPriority={priority ? "high" : undefined}
         />
       </div>
     </div>

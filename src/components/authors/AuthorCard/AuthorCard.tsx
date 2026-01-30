@@ -11,6 +11,9 @@ import React from "react";
  * @returns {JSX.Element} Carte d'auteur avec photo, nom et description
  */
 export const AuthorCard = ({ author }: { author: Author }) => {
+  const authorPhoto = author.photo as Media | undefined;
+  const authorPhotoUrl =
+    authorPhoto?.sizes?.thumbnail?.url || authorPhoto?.thumbnailURL || authorPhoto?.url;
   return (
     <Link
       href={`/auteur/${author.id}`}
@@ -20,8 +23,8 @@ export const AuthorCard = ({ author }: { author: Author }) => {
         {author.photo && (
           <ResponsiveImage
             className="w-44 h-44 min-w-44 min-h-44"
-            src={(author.photo as Media).url!}
-            alt={(author.photo as Media).alt}
+            src={authorPhotoUrl!}
+            alt={authorPhoto?.alt || ""}
             imageClass="rounded-full"
             sizes="176px"
           />

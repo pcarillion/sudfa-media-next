@@ -49,6 +49,21 @@ a:hover {
   height: 100%;
 }
 
+.image-skeleton {
+  background: linear-gradient(90deg, #e5e7eb 0%, #f3f4f6 50%, #e5e7eb 100%);
+  background-size: 200% 100%;
+  animation: image-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes image-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 .rich-text-renderer {
   font-size: 1.125rem;
   line-height: 1.75rem;

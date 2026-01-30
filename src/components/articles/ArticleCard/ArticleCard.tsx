@@ -32,6 +32,7 @@ export const ArticleCard = ({
 }: ArticleCardType) => {
   if (!article) return null;
   const thumbnail = article.photoPrincipale as Media;
+  const thumbnailUrl = thumbnail?.sizes?.card?.url || thumbnail?.url;
   return (
     <div
       className={`group w-full p-3 ${
@@ -46,7 +47,7 @@ export const ArticleCard = ({
         {thumbnail && (
           <AspectRatioImage
             className={`block pb-3 ${hasPicture ? "" : "md:hidden"}`}
-            src={thumbnail.url!}
+            src={thumbnailUrl!}
             alt={thumbnail.alt}
             sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
           />

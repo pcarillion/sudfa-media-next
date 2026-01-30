@@ -19,12 +19,13 @@ export const ArticlesList = ({ articles }: { articles: Article[] }) => {
     <ul>
       {articles.map(article => {
         const thumbnail = article.photoPrincipale as Media;
+        const thumbnailUrl = thumbnail?.sizes?.card?.url || thumbnail?.url;
         return (
           <li className="py-6 flex flex-row w-full" key={article.id}>
             {article.photoPrincipale && (
               <ResponsiveImage
                 className="hidden md:block min-w-96 min-h-52 mr-8"
-                src={thumbnail.url!}
+                src={thumbnailUrl!}
                 alt={thumbnail.alt}
                 sizes="(min-width: 768px) 384px, 100vw"
               />

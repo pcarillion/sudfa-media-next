@@ -214,7 +214,7 @@ const LexicalRenderer = ({
           
           return (
             <div key={index} className="my-6 flex flex-col items-center w-full">
-              <div className="relative w-full max-h-[60vh] flex justify-center">
+              <div className="relative w-full max-h-[60vh] flex justify-center image-skeleton">
                 <Image
                   src={node.value.url}
                   alt={node.value.alt || "Image"}
@@ -229,6 +229,8 @@ const LexicalRenderer = ({
                   }}
                   sizes="(min-width: 1024px) 720px, 100vw"
                   loading="lazy"
+                  quality={70}
+                  decoding="async"
                 />
               </div>
               {(node.value.legend || node.value.legent) && (
