@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 
@@ -33,10 +35,17 @@ export const ResponsiveImage = ({
   quality = 75,
   decoding = "async",
 }: ResponsiveImageProps) => {
+  const [loaded, setLoaded] = React.useState(false);
   const resolvedLoading = priority ? undefined : loading ?? "lazy";
   return (
     <div className={className}>
-      <div className="w-full h-full relative image-skeleton">
+      <div className="w-full h-full relative">
+        <div
+          className={`absolute inset-0 image-skeleton transition-opacity duration-300 pointer-events-none ${
+            loaded ? "opacity-0" : "opacity-100"
+          }`}
+          aria-hidden="true"
+        />
         <Image
           src={src}
           alt={alt}
@@ -49,6 +58,7 @@ export const ResponsiveImage = ({
           quality={quality}
           decoding={decoding}
           fetchPriority={priority ? "high" : undefined}
+          onLoadingComplete={() => setLoaded(true)}
         />
       </div>
     </div>

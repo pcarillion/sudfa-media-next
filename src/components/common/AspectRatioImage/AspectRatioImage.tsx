@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 
@@ -36,11 +38,18 @@ export const AspectRatioImage = ({
   quality = 75,
   decoding = "async",
 }: AspectRatioImageProps) => {
+  const [loaded, setLoaded] = React.useState(false);
   const resolvedLoading = priority ? undefined : loading ?? "lazy";
   return (
     <div className={`${className} w-full`}>
       {" "}
-      <div className={`aspect-ratio ${aspectRatio} image-skeleton`}>
+      <div className={`aspect-ratio ${aspectRatio}`}>
+        <div
+          className={`absolute inset-0 image-skeleton transition-opacity duration-300 pointer-events-none ${
+            loaded ? "opacity-0" : "opacity-100"
+          }`}
+          aria-hidden="true"
+        />
         <Image
           src={src}
           alt={alt}
@@ -53,6 +62,7 @@ export const AspectRatioImage = ({
           quality={quality}
           decoding={decoding}
           fetchPriority={priority ? "high" : undefined}
+          onLoadingComplete={() => setLoaded(true)}
         />
       </div>
     </div>

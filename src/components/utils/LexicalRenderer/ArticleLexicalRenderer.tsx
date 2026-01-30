@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { BlockRenderer } from "@/components/blocks/BlockRenderer";
+import { ContainedImageWithSkeleton } from "@/components/common/ContainedImageWithSkeleton";
 
 interface LexicalNode {
   type: string;
@@ -243,25 +243,13 @@ export const ArticleLexicalRenderer = ({
 
           return (
             <div key={index} className="my-6 flex flex-col items-center w-full">
-              <div className="relative w-full max-h-[60vh] flex justify-center image-skeleton">
-                <Image
-                  src={node.value.url}
-                  alt={node.value.alt || "Image"}
-                  width={imageWidth}
-                  height={imageHeight}
-                  className="object-contain max-w-full max-h-[60vh] h-auto"
-                  style={{
-                    width: "auto",
-                    height: "auto",
-                    maxWidth: "100%",
-                    maxHeight: "60vh",
-                  }}
-                  sizes="(min-width: 1024px) 720px, 100vw"
-                  loading="lazy"
-                  quality={70}
-                  decoding="async"
-                />
-              </div>
+              <ContainedImageWithSkeleton
+                src={node.value.url}
+                alt={node.value.alt || "Image"}
+                width={imageWidth}
+                height={imageHeight}
+                sizes="(min-width: 1024px) 720px, 100vw"
+              />
               {(node.value.legend || node.value.legent) && (
                 <p className="text-sm text-gray-600 italic mt-2 text-center max-w-full">
                   {node.value.legend || node.value.legent}
