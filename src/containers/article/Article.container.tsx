@@ -49,6 +49,7 @@ export const ArticleContainer = async ({ slug }: { slug: string }) => {
                 className="my-2.5"
                 sizes="(min-width: 1024px) 768px, 100vw"
                 priority
+                quality={85}
               />
               <Typography center classAdd="italic">
                 {thumbnail.legend}

@@ -32,7 +32,7 @@ export const ResponsiveImage = ({
   sizes = "100vw",
   priority,
   loading,
-  quality = 75,
+  quality = 65,
   decoding = "async",
 }: ResponsiveImageProps) => {
   const [loaded, setLoaded] = React.useState(false);

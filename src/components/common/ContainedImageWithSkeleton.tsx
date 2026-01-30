@@ -21,7 +21,7 @@ export const ContainedImageWithSkeleton = ({
   height,
   sizes,
   loading = "lazy",
-  quality = 70,
+  quality = 65,
   decoding = "async",
 }: ContainedImageWithSkeletonProps) => {
   const [loaded, setLoaded] = React.useState(false);

@@ -35,7 +35,7 @@ export const AspectRatioImage = ({
   sizes = "100vw",
   priority,
   loading,
-  quality = 75,
+  quality = 65,
   decoding = "async",
 }: AspectRatioImageProps) => {
   const [loaded, setLoaded] = React.useState(false);
