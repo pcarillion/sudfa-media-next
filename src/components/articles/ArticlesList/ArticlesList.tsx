@@ -26,6 +26,7 @@ export const ArticlesList = ({ articles }: { articles: Article[] }) => {
                 className="hidden md:block min-w-96 min-h-52 mr-8"
                 src={thumbnail.url!}
                 alt={thumbnail.alt}
+                sizes="(min-width: 768px) 384px, 100vw"
               />
             )}
             <div>

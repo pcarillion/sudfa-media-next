@@ -256,6 +256,8 @@ export const ArticleLexicalRenderer = ({
                     maxWidth: "100%",
                     maxHeight: "60vh",
                   }}
+                  sizes="(min-width: 1024px) 720px, 100vw"
+                  loading="lazy"
                 />
               </div>
               {(node.value.legend || node.value.legent) && (

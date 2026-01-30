@@ -7,6 +7,10 @@ interface AspectRatioImageProps {
   className?: string;
   imageClass?: string;
   aspectRatio?: "aspect-ratio-16-9" | "aspect-ratio-4-3" | "aspect-ratio-1-1";
+  sizes?: string;
+  priority?: boolean;
+  loading?: "lazy" | "eager";
+  quality?: number;
 }
 
 /**
@@ -25,6 +29,10 @@ export const AspectRatioImage = ({
   className,
   imageClass,
   aspectRatio = "aspect-ratio-16-9",
+  sizes = "100vw",
+  priority,
+  loading,
+  quality,
 }: AspectRatioImageProps) => {
   return (
     <div className={`${className} w-full`}>
@@ -36,6 +44,10 @@ export const AspectRatioImage = ({
           className={imageClass}
           fill
           style={{ objectFit: "cover" }}
+          sizes={sizes}
+          priority={priority}
+          loading={loading}
+          quality={quality}
         />
       </div>
     </div>

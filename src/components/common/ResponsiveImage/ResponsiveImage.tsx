@@ -6,6 +6,10 @@ interface ResponsiveImageProps {
   alt: string;
   className?: string;
   imageClass?: string;
+  sizes?: string;
+  priority?: boolean;
+  loading?: "lazy" | "eager";
+  quality?: number;
 }
 
 /**
@@ -22,6 +26,10 @@ export const ResponsiveImage = ({
   alt,
   className,
   imageClass,
+  sizes = "100vw",
+  priority,
+  loading,
+  quality,
 }: ResponsiveImageProps) => {
   return (
     <div className={className}>
@@ -32,6 +40,10 @@ export const ResponsiveImage = ({
           fill
           className={imageClass}
           style={{ objectFit: "cover" }}
+          sizes={sizes}
+          priority={priority}
+          loading={loading}
+          quality={quality}
         />
       </div>
     </div>

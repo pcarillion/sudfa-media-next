@@ -48,6 +48,7 @@ export const ArticleCard = ({
             className={`block pb-3 ${hasPicture ? "" : "md:hidden"}`}
             src={thumbnail.url!}
             alt={thumbnail.alt}
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
           />
         )}
         <div>

@@ -23,6 +23,7 @@ export const AuthorCard = ({ author }: { author: Author }) => {
             src={(author.photo as Media).url!}
             alt={(author.photo as Media).alt}
             imageClass="rounded-full"
+            sizes="176px"
           />
         )}
         <div className="w-full flex flex-col items-center my-6 md:ml-20">

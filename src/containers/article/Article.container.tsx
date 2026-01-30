@@ -47,6 +47,8 @@ export const ArticleContainer = async ({ slug }: { slug: string }) => {
                 src={thumbnail.url!}
                 alt={thumbnail.alt}
                 className="my-2.5"
+                sizes="(min-width: 1024px) 768px, 100vw"
+                priority
               />
               <Typography center classAdd="italic">
                 {thumbnail.legend}
