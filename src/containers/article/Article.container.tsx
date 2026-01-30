@@ -14,9 +14,17 @@ import React from "react";
 
 const LIMIT = 5;
 
-export const ArticleContainer = async ({ slug }: { slug: string }) => {
+export const ArticleContainer = async ({
+  slug,
+  draft,
+}: {
+  slug: string;
+  draft?: boolean;
+}) => {
   const api = await Api();
-  const article = await api.getArticleBySlug(decodeURIComponent(slug));
+  const article = await api.getArticleBySlug(decodeURIComponent(slug), {
+    draft,
+  });
 
   if (!article) {
     return <Container>Article non trouvé</Container>;

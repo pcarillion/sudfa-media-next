@@ -27,7 +27,10 @@ export type OrdreMenuGlobal = {
 export interface APIHandler {
   // Articles
   getHomeArticles(): Promise<Article[]>;
-  getArticleBySlug(slug: string): Promise<Article | null>;
+  getArticleBySlug(
+    slug: string,
+    options?: { draft?: boolean }
+  ): Promise<Article | null>;
   getArticlesByCategory(
     categoryName: string,
     limit?: number,

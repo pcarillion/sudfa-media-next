@@ -53,7 +53,11 @@ export const PayloadAPIActions = async (): Promise<APIHandler> => {
      * @param {string} slug - Slug de l'article
      * @returns {Promise<Article | null>} Article trouvé ou null
      */
-    async getArticleBySlug(slug: string): Promise<Article | null> {
+    async getArticleBySlug(
+      slug: string,
+      options?: { draft?: boolean }
+    ): Promise<Article | null> {
+      const draft = options?.draft === true;
       const { docs } = await payload.find({
         collection: "articles",
         where: {
@@ -61,6 +65,8 @@ export const PayloadAPIActions = async (): Promise<APIHandler> => {
             equals: slug,
           },
         },
+        draft,
+        overrideAccess: draft,
         depth: 2,
         limit: 1,
       });

@@ -9,10 +9,23 @@ export const Articles: CollectionConfig = {
   admin: {
     useAsTitle: "titre",
     defaultColumns: ["titre", "date", "category", "authors", "updatedAt"],
+    preview: ({ slug }) => {
+      if (!slug) return null;
+      const params = new URLSearchParams({
+        slug: slug as string,
+        collection: "articles",
+        path: `/article/${slug}`,
+        previewSecret: process.env.PREVIEW_SECRET || "",
+      });
+      return `/preview?${params.toString()}`;
+    },
   },
   labels: {
     singular: "Article",
     plural: "Articles",
+  },
+  versions: {
+    drafts: true,
   },
   fields: [
     {

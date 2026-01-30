@@ -3,6 +3,7 @@ import { Api } from "@/lib/api";
 import { Media } from "@/payload-types";
 import { lexicalToPlainText } from "@/utils/lexicalToPlainText";
 import { Metadata } from "next";
+import { draftMode } from "next/headers";
 
 // Force dynamic rendering - no static generation
 export const dynamic = "force-dynamic";
@@ -16,8 +17,11 @@ export async function generateMetadata({
   params,
 }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
+  const { isEnabled } = await draftMode();
   const api = await Api();
-  const article = await api.getArticleBySlug(decodeURIComponent(slug));
+  const article = await api.getArticleBySlug(decodeURIComponent(slug), {
+    draft: isEnabled,
+  });
 
   if (!article) {
     return {
@@ -39,5 +43,6 @@ export async function generateMetadata({
 
 export default async function Article({ params }: ArticlePageProps) {
   const { slug } = await params;
-  return <ArticleContainer slug={slug} />;
+  const { isEnabled } = await draftMode();
+  return <ArticleContainer slug={slug} draft={isEnabled} />;
 }
