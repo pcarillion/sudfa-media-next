@@ -1,0 +1,27 @@
+name: Run all tests
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request: {}
+  workflow_dispatch:
+
+env:
+  SUDFA_BACKEND_BASE_URL: "https://sudfa-media-payload.vercel.app/api/" # Not needed for tests but must not be undefined
+  NODEMAILER_EMAIL: ${{ secrets.NODEMAILER_EMAIL }}
+  NODEMAILER_PASS: ${{ secrets.NODEMAILER_PASS }}
+  NODEMAILER_SERVICE: ${{ secrets.NODEMAILER_SERVICE }}
+  BASE_URL: "http://localhost:3000"
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # Install npm dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          start: yarn dev
