@@ -6,7 +6,7 @@ export async function up({ payload }: MigrateUpArgs): Promise<void> {
     where: {},
     data: {
       _status: "published",
-    },
+    } as never,
     overrideAccess: true,
   });
 }

@@ -42,9 +42,6 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  migrations: {
-    dir: path.resolve(dirname, "migrations"),
-  },
   collections: [Users, Categories, Authors, Articles, Media, MediaBackUp],
   globals: [Une, Links, APropos, OrdreAuteurs, OrdreMenu],
   editor: lexicalEditor({
