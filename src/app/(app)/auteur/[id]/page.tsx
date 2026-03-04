@@ -4,9 +4,7 @@ import { Media } from "@/payload-types";
 import { Metadata } from "next";
 import React from "react";
 
-// Force dynamic rendering - no static generation
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 300;
 
 interface AuteurPageProps {
   params: Promise<{ id: string }>;

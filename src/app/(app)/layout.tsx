@@ -1,14 +1,10 @@
 import type { Metadata } from "next";
 import { Playfair_Display } from "next/font/google";
 import "../globals.css";
-import { Api } from "@/lib/api";
 
 const playfair = Playfair_Display({ subsets: ["latin"] });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const api = await Api();
-  // const pres = await api.getPresentation();
-
   const baseUrl = process.env.BASE_URL || "https://sudfa-media.com";
   return {
     metadataBase: new URL(baseUrl),

@@ -6,7 +6,8 @@ import configPromise from "@payload-config";
 
 export async function GET(req: NextRequest): Promise<Response> {
   const { searchParams } = new URL(req.url);
-  const previewSecret = searchParams.get("previewSecret");
+  const previewSecret =
+    searchParams.get("previewSecret") ?? searchParams.get("secret");
   const slug = searchParams.get("slug");
   const collection = searchParams.get("collection") as CollectionSlug | null;
   const path = searchParams.get("path");
@@ -18,7 +19,7 @@ export async function GET(req: NextRequest): Promise<Response> {
     );
   }
 
-  if (!slug || !collection || !path) {
+  if (!slug || !path || collection !== "articles") {
     return NextResponse.json(
       { error: "Missing preview parameters" },
       { status: 400 }
@@ -35,8 +36,26 @@ export async function GET(req: NextRequest): Promise<Response> {
     return NextResponse.json({ error: "Unauthenticated" }, { status: 403 });
   }
 
+  const doc = await payload.find({
+    collection: "articles",
+    where: {
+      slug: {
+        equals: slug,
+      },
+    },
+    depth: 0,
+    draft: true,
+    overrideAccess: true,
+    limit: 1,
+  });
+
+  if (!doc.docs.length) {
+    return NextResponse.json({ error: "Document not found" }, { status: 404 });
+  }
+
   const draft = await draftMode();
   draft.enable();
 
-  return NextResponse.redirect(new URL(path, req.url));
+  // Keep redirect on the same origin so the draft cookie is preserved.
+  return NextResponse.redirect(new URL(path, req.nextUrl.origin));
 }

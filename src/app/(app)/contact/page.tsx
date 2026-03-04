@@ -1,10 +1,8 @@
 import { ContactContainer } from "@/containers/contact";
 import React from "react";
 
-// Force dynamic rendering - no static generation
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 300;
 
-export default function Contact() {
+export default async function Contact() {
   return <ContactContainer />;
 }

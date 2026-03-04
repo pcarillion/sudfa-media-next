@@ -1,4 +1,5 @@
 import type { CollectionConfig } from "payload";
+import { buildPreviewURL } from "../utils/preview";
 
 /**
  * Configuration de la collection Articles pour Payload CMS
@@ -11,13 +12,22 @@ export const Articles: CollectionConfig = {
     defaultColumns: ["titre", "date", "category", "authors", "updatedAt"],
     preview: ({ slug }) => {
       if (!slug) return null;
-      const params = new URLSearchParams({
-        slug: slug as string,
+      return buildPreviewURL({
         collection: "articles",
+        slug: slug as string,
         path: `/article/${slug}`,
-        previewSecret: process.env.PREVIEW_SECRET || "",
       });
-      return `/preview?${params.toString()}`;
+    },
+    livePreview: {
+      url: ({ data }) => {
+        const slug = typeof data?.slug === "string" ? data.slug : "";
+        if (!slug) return "";
+        return buildPreviewURL({
+          collection: "articles",
+          slug,
+          path: `/article/${slug}`,
+        });
+      },
     },
   },
   labels: {

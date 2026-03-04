@@ -1,6 +1,8 @@
 import { Api } from "@/lib/api";
 import { NextRequest, NextResponse } from "next/server";
 
+export const revalidate = 300;
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -18,11 +20,18 @@ export async function GET(request: NextRequest) {
     const api = await Api();
     const articles = await api.searchArticles(query, limit);
 
-    return NextResponse.json({
-      articles,
-      total: articles.length,
-      query,
-    });
+    return NextResponse.json(
+      {
+        articles,
+        total: articles.length,
+        query,
+      },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=300, stale-while-revalidate=300",
+        },
+      }
+    );
   } catch (error) {
     console.error("Search API error:", error);
     return NextResponse.json(

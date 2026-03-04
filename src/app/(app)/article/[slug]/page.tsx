@@ -3,11 +3,10 @@ import { Api } from "@/lib/api";
 import { Media } from "@/payload-types";
 import { lexicalToPlainText } from "@/utils/lexicalToPlainText";
 import { Metadata } from "next";
+import Link from "next/link";
 import { draftMode } from "next/headers";
 
-// Force dynamic rendering - no static generation
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+export const revalidate = 300;
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
@@ -44,5 +43,22 @@ export async function generateMetadata({
 export default async function Article({ params }: ArticlePageProps) {
   const { slug } = await params;
   const { isEnabled } = await draftMode();
-  return <ArticleContainer slug={slug} draft={isEnabled} />;
+
+  const exitPreviewHref = `/preview/exit?${new URLSearchParams({
+    path: `/article/${slug}`,
+  }).toString()}`;
+
+  return (
+    <>
+      {isEnabled && (
+        <Link
+          href={exitPreviewHref}
+          className="fixed bottom-4 right-4 z-[100] border border-black bg-black px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-zinc-800"
+        >
+          Sortir du mode aperçu
+        </Link>
+      )}
+      <ArticleContainer slug={slug} draft={isEnabled} />
+    </>
+  );
 }
