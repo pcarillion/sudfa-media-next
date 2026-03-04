@@ -66,12 +66,30 @@ export const PayloadAPIActions = async (): Promise<APIHandler> => {
           },
         },
         draft,
-        overrideAccess: draft,
+        overrideAccess: true,
         depth: 2,
         limit: 1,
       });
 
-      return docs.length > 0 ? docs[0] : null;
+      if (docs.length > 0) {
+        return docs[0];
+      }
+
+      // Fallback: tolerate slight slug differences (case/encoding) and return first closest match.
+      const fallback = await payload.find({
+        collection: "articles",
+        where: {
+          slug: {
+            like: slug,
+          },
+        },
+        draft,
+        overrideAccess: true,
+        depth: 2,
+        limit: 1,
+      });
+
+      return fallback.docs.length > 0 ? fallback.docs[0] : null;
     },
 
     async getArticlesByCategory(

@@ -1,5 +1,6 @@
 import type { CollectionSlug, PayloadRequest } from "payload";
 import { getPayload } from "payload";
+import { redirect } from "next/navigation";
 import { draftMode } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import configPromise from "@payload-config";
@@ -56,6 +57,5 @@ export async function GET(req: NextRequest): Promise<Response> {
   const draft = await draftMode();
   draft.enable();
 
-  // Keep redirect on the same origin so the draft cookie is preserved.
-  return NextResponse.redirect(new URL(path, req.nextUrl.origin));
+  redirect(path);
 }

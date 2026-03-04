@@ -30,30 +30,42 @@ export const ArticleContainer = async ({
     return <Container>Article non trouvé</Container>;
   }
 
-  const otherArticles = article.category
-    ? await api.getArticlesByCategory(
-        (article.category as Category).name,
-        LIMIT
-      )
+  const categoryObject =
+    article.category && typeof article.category === "object"
+      ? (article.category as Category)
+      : null;
+  const otherArticles = categoryObject?.name
+    ? await api.getArticlesByCategory(categoryObject.name, LIMIT)
     : [];
 
-  const auteur = article.authors[0] as Author;
-  const thumbnail = article.photoPrincipale as Media;
+  const firstAuthor =
+    article.authors?.[0] && typeof article.authors[0] === "object"
+      ? (article.authors[0] as Author)
+      : null;
+  const authorName = firstAuthor?.name || "Anonyme";
+  const thumbnail =
+    article.photoPrincipale && typeof article.photoPrincipale === "object"
+      ? (article.photoPrincipale as Media)
+      : null;
+  const thumbnailUrl = thumbnail?.sizes?.card?.url || thumbnail?.url;
+  const articleAuthors = (article.authors || []).filter(
+    author => typeof author === "object"
+  ) as Author[];
   return (
     <>
       <Container>
         <div className="px-3 md:px-24 w-full">
           <H1>{article.titre}</H1>
           <Typography center classAdd="my-2.5">
-            {formatDate(article.date)} - par {auteur?.name || "Anonyme"} -{" "}
-            {(article.category as Category)?.name || "Non catégorisé"}
+            {formatDate(article.date)} - par {authorName} -{" "}
+            {categoryObject?.name || "Non catégorisé"}
           </Typography>
           <LexicalRenderer content={article.presentation} />
-          {article.photoPrincipale && (
+          {thumbnailUrl && (
             <>
               <AspectRatioImage
-                src={thumbnail.url!}
-                alt={thumbnail.alt}
+                src={thumbnailUrl}
+                alt={thumbnail?.alt || ""}
                 className="my-2.5"
                 sizes="(min-width: 1024px) 768px, 100vw"
                 priority
@@ -66,12 +78,12 @@ export const ArticleContainer = async ({
           )}
           <ArticleLexicalRenderer content={article.article} />
         </div>
-        {(article.authors as Author[]).map(author => {
+        {articleAuthors.map(author => {
           return <AuthorCard key={author.id} author={author} />;
         })}
-        {otherArticles.length > 0 && article.category && (
+        {otherArticles.length > 0 && categoryObject && (
           <div>
-            <H3 center>{(article.category as Category).name}</H3>
+            <H3 center>{categoryObject.name}</H3>
             <ArticlesList articles={otherArticles} />
           </div>
         )}

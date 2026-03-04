@@ -1,4 +1,5 @@
 import { draftMode } from "next/headers";
+import { redirect } from "next/navigation";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest): Promise<Response> {
@@ -8,5 +9,5 @@ export async function GET(req: NextRequest): Promise<Response> {
   const draft = await draftMode();
   draft.disable();
 
-  return NextResponse.redirect(new URL(path, req.nextUrl.origin));
+  redirect(path);
 }

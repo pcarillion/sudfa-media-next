@@ -33,9 +33,12 @@ export async function generateMetadata({
     title: `Sudfa média - ${article.titre}`,
     description: lexicalToPlainText(article.presentation),
     openGraph: {
-      images: article.photoPrincipale
-        ? [(article.photoPrincipale as Media).url!]
-        : [],
+      images:
+        article.photoPrincipale &&
+        typeof article.photoPrincipale === "object" &&
+        (article.photoPrincipale as Media).url
+          ? [((article.photoPrincipale as Media).url as string)]
+          : [],
     },
   };
 }
