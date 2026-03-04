@@ -25,6 +25,7 @@ export const ContainedImageWithSkeleton = ({
   decoding = "async",
 }: ContainedImageWithSkeletonProps) => {
   const [loaded, setLoaded] = React.useState(false);
+  const isPayloadMedia = src.startsWith("/api/media/file/");
 
   return (
     <div className="relative w-full max-h-[60vh] flex justify-center">
@@ -50,6 +51,7 @@ export const ContainedImageWithSkeleton = ({
         loading={loading}
         quality={quality}
         decoding={decoding}
+        unoptimized={isPayloadMedia}
         onLoad={() => setLoaded(true)}
       />
     </div>

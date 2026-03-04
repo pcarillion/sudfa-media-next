@@ -38,6 +38,7 @@ export const ResponsiveImage = ({
   decoding = "async",
 }: ResponsiveImageProps) => {
   const [loaded, setLoaded] = React.useState(false);
+  const isPayloadMedia = src.startsWith("/api/media/file/");
   const resolvedLoading = priority ? undefined : loading ?? "lazy";
   return (
     <div className={className}>
@@ -59,6 +60,7 @@ export const ResponsiveImage = ({
           loading={resolvedLoading}
           quality={quality}
           decoding={decoding}
+          unoptimized={isPayloadMedia}
           fetchPriority={priority ? "high" : undefined}
           onLoad={() => setLoaded(true)}
         />
