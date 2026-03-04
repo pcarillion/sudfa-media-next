@@ -19,7 +19,7 @@ export const ArticlesList = ({ articles }: { articles: Article[] }) => {
     <ul>
       {articles.map(article => {
         const thumbnail = article.photoPrincipale as Media;
-        const thumbnailUrl = thumbnail?.sizes?.card?.url || thumbnail?.url;
+        const thumbnailUrl = thumbnail?.url || thumbnail?.sizes?.card?.url;
         return (
           <li className="py-6 flex flex-row w-full" key={article.id}>
             {article.photoPrincipale && (

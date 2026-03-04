@@ -8,6 +8,7 @@ interface ResponsiveImageProps {
   alt: string;
   className?: string;
   imageClass?: string;
+  objectFit?: "cover" | "contain";
   sizes?: string;
   priority?: boolean;
   loading?: "lazy" | "eager";
@@ -29,6 +30,7 @@ export const ResponsiveImage = ({
   alt,
   className,
   imageClass,
+  objectFit = "cover",
   sizes = "100vw",
   priority,
   loading,
@@ -51,7 +53,7 @@ export const ResponsiveImage = ({
           alt={alt}
           fill
           className={imageClass}
-          style={{ objectFit: "cover" }}
+          style={{ objectFit }}
           sizes={sizes}
           priority={priority}
           loading={resolvedLoading}

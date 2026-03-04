@@ -8,6 +8,7 @@ interface AspectRatioImageProps {
   alt: string;
   className?: string;
   imageClass?: string;
+  objectFit?: "cover" | "contain";
   aspectRatio?: "aspect-ratio-16-9" | "aspect-ratio-4-3" | "aspect-ratio-1-1";
   sizes?: string;
   priority?: boolean;
@@ -31,6 +32,7 @@ export const AspectRatioImage = ({
   alt,
   className,
   imageClass,
+  objectFit = "cover",
   aspectRatio = "aspect-ratio-16-9",
   sizes = "100vw",
   priority,
@@ -55,7 +57,7 @@ export const AspectRatioImage = ({
           alt={alt}
           className={imageClass}
           fill
-          style={{ objectFit: "cover" }}
+          style={{ objectFit }}
           sizes={sizes}
           priority={priority}
           loading={resolvedLoading}

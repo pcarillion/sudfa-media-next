@@ -47,7 +47,7 @@ export const ArticleContainer = async ({
     article.photoPrincipale && typeof article.photoPrincipale === "object"
       ? (article.photoPrincipale as Media)
       : null;
-  const thumbnailUrl = thumbnail?.sizes?.card?.url || thumbnail?.url;
+  const thumbnailUrl = thumbnail?.url || thumbnail?.sizes?.card?.url;
   const articleAuthors = (article.authors || []).filter(
     author => typeof author === "object"
   ) as Author[];

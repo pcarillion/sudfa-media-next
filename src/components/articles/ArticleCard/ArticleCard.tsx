@@ -32,7 +32,7 @@ export const ArticleCard = ({
 }: ArticleCardType) => {
   if (!article) return null;
   const thumbnail = article.photoPrincipale as Media;
-  const thumbnailUrl = thumbnail?.sizes?.card?.url || thumbnail?.url;
+  const thumbnailUrl = thumbnail?.url || thumbnail?.sizes?.card?.url;
   return (
     <div
       className={`group w-full p-3 ${
