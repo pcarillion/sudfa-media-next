@@ -22,7 +22,7 @@ export const AuthorCard = ({ author }: { author: Author }) => {
       <div className="group w-full flex box-border flex-col items-center px-3 py-12 mx-3 md:px-36 md:flex-row">
         {author.photo && (
           <ResponsiveImage
-            className="w-44 h-44 min-w-44 min-h-44"
+            className="w-44 h-44 min-w-44 min-h-44 rounded-full overflow-hidden"
             src={authorPhotoUrl!}
             alt={authorPhoto?.alt || ""}
             imageClass="rounded-full"
