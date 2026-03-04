@@ -28,12 +28,12 @@ export const ContainedImageWithSkeleton = ({
 
   return (
     <div className="relative w-full max-h-[60vh] flex justify-center">
-      <div
-        className={`absolute inset-0 image-skeleton transition-opacity duration-300 pointer-events-none ${
-          loaded ? "opacity-0" : "opacity-100"
-        }`}
-        aria-hidden="true"
-      />
+      {!loaded && (
+        <div
+          className="absolute inset-0 image-skeleton pointer-events-none"
+          aria-hidden="true"
+        />
+      )}
       <Image
         src={src}
         alt={alt}
@@ -50,7 +50,7 @@ export const ContainedImageWithSkeleton = ({
         loading={loading}
         quality={quality}
         decoding={decoding}
-        onLoadingComplete={() => setLoaded(true)}
+        onLoad={() => setLoaded(true)}
       />
     </div>
   );

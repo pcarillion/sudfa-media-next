@@ -46,12 +46,12 @@ export const AspectRatioImage = ({
     <div className={`${className} w-full`}>
       {" "}
       <div className={`aspect-ratio ${aspectRatio}`}>
-        <div
-          className={`absolute inset-0 image-skeleton transition-opacity duration-300 pointer-events-none ${
-            loaded ? "opacity-0" : "opacity-100"
-          }`}
-          aria-hidden="true"
-        />
+        {!loaded && (
+          <div
+            className="absolute inset-0 image-skeleton pointer-events-none"
+            aria-hidden="true"
+          />
+        )}
         <Image
           src={src}
           alt={alt}
@@ -64,7 +64,7 @@ export const AspectRatioImage = ({
           quality={quality}
           decoding={decoding}
           fetchPriority={priority ? "high" : undefined}
-          onLoadingComplete={() => setLoaded(true)}
+          onLoad={() => setLoaded(true)}
         />
       </div>
     </div>
