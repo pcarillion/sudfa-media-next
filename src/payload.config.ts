@@ -64,7 +64,8 @@ export default buildConfig({
         },
       }),
       LinkFeature({
-        fields: [
+        fields: ({ defaultFields }) => [
+          ...defaultFields,
           {
             name: "rel",
             label: "Relation",
